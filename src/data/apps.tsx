@@ -22,7 +22,6 @@ import { SiMongodb, SiMysql, SiCplusplus, SiSharp } from "react-icons/si";
 import ediginoLogo from "../assets/edigino_logo.png";
 import kaunoGrudaiLogo from "../assets/kauno_grudai_logo.png";
 import vikoLogo from "../assets/viko_logo.png";
-// import nkscLogo from "../assets/nksc_logo.png"; // Uncomment if you have this logo
 
 import { useState } from "react";
 
@@ -32,7 +31,6 @@ export type AppData = {
   content: ReactNode;
 };
 
-// Skill categories and their skills
 const skillCategories = [
   {
     name: "Programming",
@@ -144,7 +142,7 @@ const skillCategories = [
         name: "Cybersecurity",
         icon: <FaLock className="text-blue-900" size={22} />,
         org: "NKSC",
-        orgLogo: "", // nkscLogo,
+        orgLogo: "",
       },
       {
         name: "Building Security",
@@ -174,7 +172,6 @@ const skillCategories = [
   },
 ];
 
-// SkillsPanel component for category filtering
 function SkillsPanel() {
   const [selected, setSelected] = useState<string | null>(null);
 
@@ -226,7 +223,6 @@ function SkillsPanel() {
                         </span>
                       )}
                     </div>
-                    {/* Removed FaEdit icon */}
                   </div>
                 ))
               )

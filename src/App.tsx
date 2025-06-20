@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Desktop from "./components/Desktop";
 import Taskbar from "./components/Taskbar";
+import LogOut from "./pages/LogOut";
+import Restart from "./pages/Restart";
+import Sleep from "./pages/Sleep";
 
 import bg1 from "./assets/background1.jpg";
 import bg2 from "./assets/background2.jpg";
@@ -8,7 +12,7 @@ import bg3 from "./assets/background3.jpg";
 
 const backgrounds = [bg1, bg2, bg3];
 
-function App() {
+function MainDesktop() {
   const [openApps, setOpenApps] = useState<string[]>([]);
   const [linuxMenu, setLinuxMenu] = useState(false);
 
@@ -67,7 +71,6 @@ function App() {
       <div className="absolute inset-0 bg-white/20 z-10" />
 
       <div className="relative z-20 flex flex-col min-h-screen">
-        {/* Top Bar: removed opacity and border radius */}
         <div className="w-full h-10 bg-white border-b border-gray-300 flex items-center px-4 font-bold text-gray-700 shadow-sm">
           Welcome to Matas CV desktop!
         </div>
@@ -91,4 +94,15 @@ function App() {
   );
 }
 
-export default App;
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<MainDesktop />} />
+        <Route path="/logout" element={<LogOut />} />
+        <Route path="/restart" element={<Restart />} />
+        <Route path="/sleep" element={<Sleep />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}

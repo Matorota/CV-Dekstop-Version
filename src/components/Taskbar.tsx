@@ -40,7 +40,6 @@ export default function Taskbar({
               style={{ minWidth: 40, height: 40 }}
             >
               <span className="flex items-center justify-center h-7 w-7">
-                {/* Render icon at its natural aspect ratio, size 22 for react-icons */}
                 {React.isValidElement(app.icon) ? (
                   <app.icon.type
                     {...(typeof app.icon.props === "object" && app.icon.props
@@ -53,7 +52,6 @@ export default function Taskbar({
                   app.icon
                 )}
               </span>
-              {/* Hide name if not enough space */}
             </button>
           );
         })}
