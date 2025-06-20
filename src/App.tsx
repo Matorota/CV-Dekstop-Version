@@ -71,7 +71,7 @@ function MainDesktop() {
       <div className="absolute inset-0 bg-white/20 z-10" />
 
       <div className="relative z-20 flex flex-col min-h-screen">
-        <div className="w-full h-10 bg-white border-b border-gray-300 flex items-center px-4 font-bold text-gray-700 shadow-sm">
+        <div className="w-full h-10 sm:h-10 bg-white border-b border-gray-300 flex items-center px-2 sm:px-4 font-bold text-gray-700 shadow-sm text-base sm:text-lg">
           Welcome to Matas CV desktop!
         </div>
 

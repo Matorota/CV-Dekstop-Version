@@ -10,7 +10,6 @@ type DesktopProps = {
   onCloseApp: (name: string) => void;
   linuxMenu: boolean;
 };
-
 export default function Desktop({
   openApps,
   onAppClick,
@@ -19,7 +18,7 @@ export default function Desktop({
 }: DesktopProps) {
   return (
     <div className="flex-1 flex flex-row items-start justify-start relative select-none">
-      <div className="flex flex-col gap-10 mt-16 ml-10">
+      <div className="flex flex-row sm:flex-col gap-4 sm:gap-10 mt-4 sm:mt-16 ml-2 sm:ml-10">
         {apps.map((app: AppData) => (
           <AppIcon
             key={app.name}

@@ -18,7 +18,7 @@ export default function Taskbar({
   time,
 }: TaskbarProps) {
   return (
-    <div className="w-full h-12 bg-white border-t border-gray-300 flex items-center px-4 shadow-lg fixed bottom-0 left-0 z-40">
+    <div className="w-full h-10 sm:h-12 bg-white border-t border-gray-300 flex items-center px-2 sm:px-4 shadow-lg fixed bottom-0 left-0 z-40">
       <button
         onClick={onLinuxClick}
         className={`mr-4 flex items-center justify-center rounded-full hover:bg-blue-100 transition p-1 ${
@@ -57,7 +57,7 @@ export default function Taskbar({
         })}
       </div>
       <div className="flex-1" />
-      <div className="text-gray-700 font-mono text-sm px-3 select-none">
+      <div className="text-gray-700 font-mono text-xs sm:text-sm px-2 sm:px-3 select-none">
         {time}
       </div>
     </div>
