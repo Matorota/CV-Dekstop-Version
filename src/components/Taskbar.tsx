@@ -17,7 +17,7 @@ export default function Taskbar({
   time,
 }: TaskbarProps) {
   return (
-    <div className="w-full h-12 bg-white/80 border-t border-gray-300 flex items-center px-4 shadow-lg fixed bottom-0 left-0 z-40">
+    <div className="w-full h-12 bg-white border-t border-gray-300 flex items-center px-4 shadow-lg fixed bottom-0 left-0 z-40">
       {/* Linux Icon */}
       <button
         onClick={onLinuxClick}
