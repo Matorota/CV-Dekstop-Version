@@ -1,3 +1,4 @@
+import React from "react";
 import tuxImg from "../assets/tux.png";
 import { apps } from "../data/apps";
 
@@ -36,12 +37,23 @@ export default function Taskbar({
               key={app.name}
               onClick={() => onCloseApp(app.name)}
               className="flex flex-col items-center px-2 py-1 rounded-lg bg-blue-100 border-2 border-blue-300 shadow transition-all duration-200"
-              style={{ minWidth: 60 }}
+              style={{ minWidth: 40, height: 40 }}
             >
-              {app.icon}
-              <span className="text-[10px] font-semibold text-gray-700">
-                {app.name}
+              <span className="flex items-center justify-center h-7 w-7">
+                {/* Render icon at its natural aspect ratio, size 22 for react-icons */}
+                {React.isValidElement(app.icon) ? (
+                  <app.icon.type
+                    {...(typeof app.icon.props === "object" && app.icon.props
+                      ? app.icon.props
+                      : {})}
+                    size={22}
+                    style={{ display: "block" }}
+                  />
+                ) : (
+                  app.icon
+                )}
               </span>
+              {/* Hide name if not enough space */}
             </button>
           );
         })}
