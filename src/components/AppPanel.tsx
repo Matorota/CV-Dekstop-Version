@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 type AppPanelProps = {
   name: string;
   icon: ReactNode;
-  content: ReactNode; // <-- FIXED
+  content: ReactNode;
   idx: number;
   onClose: () => void;
 };

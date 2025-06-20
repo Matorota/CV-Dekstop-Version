@@ -19,7 +19,6 @@ export default function Desktop({
 }: DesktopProps) {
   return (
     <div className="flex-1 flex flex-row items-start justify-start relative select-none">
-      {/* App Icons - left column */}
       <div className="flex flex-col gap-10 mt-16 ml-10">
         {apps.map((app: AppData) => (
           <AppIcon
@@ -31,7 +30,6 @@ export default function Desktop({
         ))}
       </div>
 
-      {/* App Panels (Draggable) */}
       {openApps.map((name, idx) => {
         const app = apps.find((a: AppData) => a.name === name);
         if (!app) return null;
@@ -47,7 +45,6 @@ export default function Desktop({
         );
       })}
 
-      {/* Linux Menu */}
       <LinuxMenu visible={linuxMenu} />
     </div>
   );
