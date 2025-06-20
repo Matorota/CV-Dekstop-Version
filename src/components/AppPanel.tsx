@@ -11,7 +11,6 @@ type AppPanelProps = {
 
 export default function AppPanel({
   name,
-  icon,
   content,
   idx,
   onClose,

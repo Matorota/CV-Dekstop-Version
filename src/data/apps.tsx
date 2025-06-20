@@ -12,7 +12,6 @@ import {
   FaJs,
   FaGitAlt,
   FaCuttlefish,
-  FaEdit,
   FaCode,
   FaTools,
   FaUserShield,
