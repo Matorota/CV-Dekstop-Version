@@ -21,11 +21,11 @@ export default function AppPanel({
       default={{
         x: isMobile ? 0 : 300 + idx * 40,
         y: isMobile ? 0 : 100 + idx * 40,
-        width: isMobile ? "100vw" : 370,
-        height: isMobile ? "100vh" : "auto",
+        width: isMobile ? "98vw" : 320,
+        height: isMobile ? "60vh" : "auto",
       }}
-      minWidth={isMobile ? "100vw" : 300}
-      minHeight={isMobile ? "100vh" : undefined}
+      minWidth={isMobile ? "98vw" : 260}
+      minHeight={isMobile ? "60vh" : undefined}
       bounds="parent"
       dragHandleClassName="window-titlebar"
       style={{
@@ -37,8 +37,8 @@ export default function AppPanel({
       disableDragging={isMobile}
     >
       <div className="bg-white/90 rounded-xl shadow-2xl border-2 border-blue-300 cursor-default h-full">
-        <div className="window-titlebar flex items-center justify-between px-4 py-2 bg-blue-100 rounded-t-xl border-b border-blue-300 cursor-move select-none text-base sm:text-lg">
-          <span className="font-bold text-blue-900">{name}</span>
+        <div className="window-titlebar flex items-center justify-between px-2 sm:px-4 py-2 bg-blue-100 rounded-t-xl border-b border-blue-300 cursor-move select-none text-sm sm:text-lg">
+          <span className="font-bold text-blue-900 truncate">{name}</span>
           <button
             onClick={onClose}
             className="text-gray-500 hover:text-red-500 font-bold text-lg"
@@ -47,7 +47,7 @@ export default function AppPanel({
             ×
           </button>
         </div>
-        <div className="p-2 sm:p-4 text-gray-700 overflow-auto h-[calc(100%-48px)]">
+        <div className="p-1 sm:p-4 text-gray-700 overflow-auto h-[calc(100%-48px)] text-xs sm:text-base">
           {content}
         </div>
       </div>
