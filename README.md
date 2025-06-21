@@ -1,3 +1,3 @@
-# React + TypeScript + Vite
-### For now only works for dekstop planing to add phone version to
+# My personal CV
+
 https://cv-dekstop-version.vercel.app/
