@@ -14,10 +14,8 @@ export default function Taskbar({
   openApps,
   onLinuxClick,
   linuxMenu,
-  onCloseApp,
   time,
 }: TaskbarProps) {
-  // Get minimized apps and restore handler from window (see Desktop.tsx)
   const minimized: string[] = (window as any).__minimizedApps || [];
   const restoreMinimizedApp: (name: string) => void =
     (window as any).__restoreMinimizedApp || (() => {});
