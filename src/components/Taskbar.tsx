@@ -17,6 +17,11 @@ export default function Taskbar({
   onCloseApp,
   time,
 }: TaskbarProps) {
+  // Get minimized apps and restore handler from window (see Desktop.tsx)
+  const minimized: string[] = (window as any).__minimizedApps || [];
+  const restoreMinimizedApp: (name: string) => void =
+    (window as any).__restoreMinimizedApp || (() => {});
+
   return (
     <div className="w-full h-10 sm:h-12 bg-white border-t border-gray-300 flex items-center px-2 sm:px-4 shadow-lg fixed bottom-0 left-0 z-40">
       <button
@@ -32,12 +37,20 @@ export default function Taskbar({
         {openApps.map((name) => {
           const app = apps.find((a) => a.name === name);
           if (!app) return null;
+          const isMinimized = minimized.includes(name);
           return (
             <button
               key={app.name}
-              onClick={() => onCloseApp(app.name)}
-              className="flex flex-col items-center px-2 py-1 rounded-lg bg-blue-100 border-2 border-blue-300 shadow transition-all duration-200"
+              onClick={
+                () => (isMinimized ? restoreMinimizedApp(app.name) : undefined) // Do nothing if not minimized
+              }
+              className={`flex flex-col items-center px-2 py-1 rounded-lg border-2 shadow transition-all duration-200 ${
+                isMinimized
+                  ? "bg-gray-200 border-gray-400"
+                  : "bg-blue-100 border-blue-300"
+              }`}
               style={{ minWidth: 40, height: 40 }}
+              title={isMinimized ? "Restore" : app.name}
             >
               <span className="flex items-center justify-center h-7 w-7">
                 {React.isValidElement(app.icon) ? (

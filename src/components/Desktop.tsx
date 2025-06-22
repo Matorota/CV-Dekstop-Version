@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { apps } from "../data/apps";
 import type { AppData } from "../data/apps";
 import AppIcon from "./AppIcon";
@@ -17,6 +18,16 @@ export default function Desktop({
   onCloseApp,
   linuxMenu,
 }: DesktopProps) {
+  const [minimized, setMinimized] = useState<string[]>([]);
+
+  const handleMinimize = (name: string) => {
+    setMinimized((prev) => [...prev, name]);
+  };
+
+  const handleRestore = (name: string) => {
+    setMinimized((prev) => prev.filter((n) => n !== name));
+  };
+
   return (
     <div className="flex-1 flex flex-row items-start justify-start relative select-none">
       <div className="w-full sm:w-auto overflow-y-auto max-h-[60vh] sm:max-h-none px-1">
@@ -33,6 +44,7 @@ export default function Desktop({
       </div>
 
       {openApps.map((name, idx) => {
+        if (minimized.includes(name)) return null;
         const app = apps.find((a: AppData) => a.name === name);
         if (!app) return null;
         return (
@@ -43,11 +55,28 @@ export default function Desktop({
             content={app.content}
             idx={idx}
             onClose={() => onCloseApp(app.name)}
+            onMinimize={() => handleMinimize(app.name)}
           />
         );
       })}
 
       <LinuxMenu visible={linuxMenu} />
+
+      {/* Pass restore handler to Taskbar */}
+      <TaskbarRestoreHandler minimized={minimized} onRestore={handleRestore} />
     </div>
   );
+}
+
+// Helper component to pass restore handler to Taskbar via window object (or use context in a real app)
+function TaskbarRestoreHandler({
+  minimized,
+  onRestore,
+}: {
+  minimized: string[];
+  onRestore: (name: string) => void;
+}) {
+  (window as any).__restoreMinimizedApp = onRestore;
+  (window as any).__minimizedApps = minimized;
+  return null;
 }
