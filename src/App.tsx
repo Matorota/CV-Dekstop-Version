@@ -9,7 +9,9 @@ import Sleep from "./pages/Sleep";
 import bg1 from "./assets/background1.jpg";
 import bg2 from "./assets/background2.jpg";
 import bg3 from "./assets/background3.jpg";
+import TestingBackend from "./components/backendEnpoints/TestingBackend";
 
+<TestingBackend />;
 const backgrounds = [bg1, bg2, bg3];
 
 function MainDesktop() {
