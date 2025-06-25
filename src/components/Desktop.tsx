@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { apps } from "../data/apps";
-import type { AppData } from "../data/apps";
+import { apps } from "../data/apps/index";
+import type { AppData } from "../data/apps/types";
 import AppIcon from "./AppIcon";
 import AppPanel from "./AppPanel";
 import LinuxMenu from "./LinuxMenu";

@@ -1,6 +1,6 @@
 import React from "react";
 import tuxImg from "../assets/tux.png";
-import { apps } from "../data/apps";
+import { apps } from "../data/apps/index";
 
 type TaskbarProps = {
   openApps: string[];
