@@ -47,6 +47,7 @@ export default function Desktop({
         if (minimized.includes(name)) return null;
         const app = apps.find((a: AppData) => a.name === name);
         if (!app) return null;
+        const isGithub = app.name === "Github";
         return (
           <AppPanel
             key={name}
@@ -56,19 +57,23 @@ export default function Desktop({
             idx={idx}
             onClose={() => onCloseApp(app.name)}
             onMinimize={() => handleMinimize(app.name)}
+            defaultWidth={
+              isGithub ? (window.innerWidth < 640 ? "98vw" : 900) : undefined
+            }
+            defaultHeight={
+              isGithub ? (window.innerWidth < 640 ? "60vh" : 400) : undefined
+            }
           />
         );
       })}
 
       <LinuxMenu visible={linuxMenu} />
 
-      {/* Pass restore handler to Taskbar */}
       <TaskbarRestoreHandler minimized={minimized} onRestore={handleRestore} />
     </div>
   );
 }
 
-// Helper component to pass restore handler to Taskbar via window object (or use context in a real app)
 function TaskbarRestoreHandler({
   minimized,
   onRestore,

@@ -9,6 +9,8 @@ type AppPanelProps = {
   idx: number;
   onClose: () => void;
   onMinimize: () => void;
+  defaultWidth?: number | string;
+  defaultHeight?: number | string;
 };
 
 export default function AppPanel({
@@ -17,6 +19,8 @@ export default function AppPanel({
   idx,
   onClose,
   onMinimize,
+  defaultWidth,
+  defaultHeight,
 }: AppPanelProps) {
   const isMobile = typeof window !== "undefined" && window.innerWidth < 640;
   const [maximized, setMaximized] = useState(isMobile);
@@ -26,8 +30,8 @@ export default function AppPanel({
       default={{
         x: isMobile ? 0 : 300 + idx * 40,
         y: isMobile ? 0 : 100 + idx * 40,
-        width: isMobile ? "98vw" : 320,
-        height: isMobile ? "60vh" : "auto",
+        width: defaultWidth ?? (isMobile ? "98vw" : 320),
+        height: defaultHeight ?? (isMobile ? "60vh" : "auto"),
       }}
       position={maximized ? { x: 0, y: 0 } : undefined}
       size={maximized ? { width: "100vw", height: "100vh" } : undefined}
@@ -47,7 +51,6 @@ export default function AppPanel({
         <div className="window-titlebar flex items-center justify-between px-2 sm:px-4 py-2 bg-blue-100 rounded-t-xl border-b border-blue-300 cursor-move select-none text-sm sm:text-lg">
           <span className="font-bold text-blue-900 truncate">{name}</span>
           <div className="flex items-center gap-2">
-            {/* Minimize */}
             <button
               onClick={onMinimize}
               className="text-gray-500 hover:text-blue-600 text-lg px-1"
@@ -65,7 +68,6 @@ export default function AppPanel({
                 />
               </svg>
             </button>
-            {/* Maximize/Restore */}
             <button
               onClick={() => setMaximized((m) => !m)}
               className="text-gray-500 hover:text-blue-600 text-lg px-1"
@@ -100,7 +102,6 @@ export default function AppPanel({
                 </svg>
               )}
             </button>
-            {/* Close */}
             <button
               onClick={onClose}
               className="text-gray-500 hover:text-red-500 font-bold text-lg px-1"

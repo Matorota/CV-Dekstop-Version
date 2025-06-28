@@ -21,7 +21,14 @@ export default function Taskbar({
     (window as any).__restoreMinimizedApp || (() => {});
 
   return (
-    <div className="w-full h-10 sm:h-12 bg-white border-t border-gray-300 flex items-center px-2 sm:px-4 shadow-lg fixed bottom-0 left-0 z-40">
+    <div
+      className="w-full h-12 bg-white/60 backdrop-blur-md border-t border-gray-200 flex items-center px-4 shadow-2xl fixed bottom-0 left-0 z-40"
+      style={{
+        borderRadius: 0,
+        boxShadow: "0 4px 24px 0 rgba(0,0,0,0.15)",
+        borderTop: "1.5px solid #d1d5db",
+      }}
+    >
       <button
         onClick={onLinuxClick}
         className={`mr-4 flex items-center justify-center rounded-full hover:bg-blue-100 transition p-1 ${
@@ -39,8 +46,8 @@ export default function Taskbar({
           return (
             <button
               key={app.name}
-              onClick={
-                () => (isMinimized ? restoreMinimizedApp(app.name) : undefined) // Do nothing if not minimized
+              onClick={() =>
+                isMinimized ? restoreMinimizedApp(app.name) : undefined
               }
               className={`flex flex-col items-center px-2 py-1 rounded-lg border-2 shadow transition-all duration-200 ${
                 isMinimized
@@ -68,6 +75,7 @@ export default function Taskbar({
         })}
       </div>
       <div className="flex-1" />
+      {/* Optionally, you can add a clock here too */}
       <div className="text-gray-700 font-mono text-xs sm:text-sm px-2 sm:px-3 select-none">
         {time}
       </div>

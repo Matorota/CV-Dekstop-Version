@@ -218,7 +218,6 @@ const githubProjects = [
   {
     name: "Akademine_sistema",
     url: "https://github.com/Matorota/Akademine_sistema",
-    lang: "C#",
     langIcon: <SiSharp className="text-green-400" size={20} />,
     langColor: "border-green-400",
     description: "University management system for academic records and users.",
@@ -227,7 +226,6 @@ const githubProjects = [
   {
     name: "PasswordManager",
     url: "https://github.com/Matorota/PasswordManager",
-    lang: "C#",
     langIcon: <SiSharp className="text-green-400" size={20} />,
     langColor: "border-green-400",
     description: "Secure password manager desktop application.",
@@ -236,7 +234,6 @@ const githubProjects = [
   {
     name: "ClothingStore",
     url: "https://github.com/Matorota/ClothingStore",
-    lang: "JavaScript",
     langIcon: <SiJavascript className="text-yellow-300" size={20} />,
     langColor: "border-yellow-300",
     description: "Simple e-commerce web app for clothing sales.",
@@ -245,7 +242,6 @@ const githubProjects = [
   {
     name: "RandomStudentFinder",
     url: "https://github.com/Matorota/RandomStudentFinder",
-    lang: "TypeScript",
     langIcon: <SiTypescript className="text-blue-400" size={20} />,
     langColor: "border-blue-400",
     description: "Tool for randomly selecting students from a list.",
@@ -254,7 +250,6 @@ const githubProjects = [
   {
     name: "CV-Dekstop-Version",
     url: "https://github.com/Matorota/CV-Dekstop-Version",
-    lang: "TypeScript",
     langIcon: <SiTypescript className="text-cyan-400" size={20} />,
     langColor: "border-cyan-400",
     description:
@@ -271,7 +266,6 @@ export const apps: AppData[] = [
       <div className="p-2 w-full max-w-full md:max-w-2xl">
         <h2 className="text-xl font-bold mb-4">Experience</h2>
         <div className="flex flex-col gap-4">
-          {/* Edigino */}
           <div className="flex flex-row items-start gap-3 mb-2">
             <img
               src={ediginoLogo}
@@ -445,9 +439,7 @@ export const apps: AppData[] = [
                 </span>
                 <span
                   className={`ml-2 border ${proj.langColor} bg-gray-700 text-xs px-2 py-0.5 rounded`}
-                >
-                  {proj.lang}
-                </span>
+                ></span>
               </div>
               <div className="text-gray-300 text-xs italic">
                 {proj.description}
@@ -460,16 +452,6 @@ export const apps: AppData[] = [
                   href={proj.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`px-3 py-1 rounded-lg text-xs font-bold opacity-80 hover:opacity-100 shadow transition
-                    ${
-                      proj.lang === "C#"
-                        ? "bg-green-600 text-white hover:bg-green-700"
-                        : proj.lang === "JavaScript"
-                        ? "bg-yellow-500 text-white hover:bg-yellow-600"
-                        : proj.lang === "TypeScript"
-                        ? "bg-blue-600 text-white hover:bg-blue-700"
-                        : "bg-blue-700 text-white hover:bg-blue-800"
-                    }`}
                   title="View on GitHub"
                 >
                   View on GitHub

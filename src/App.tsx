@@ -54,6 +54,11 @@ function MainDesktop() {
 
   const handleLinuxClick = () => setLinuxMenu((prev) => !prev);
 
+  // --- SYSTEM TRAY MOCKUP ---
+  const SystemTray = () => (
+    <div className="flex items-center gap-4 ml-auto"></div>
+  );
+
   return (
     <div className="min-h-screen w-full flex flex-col relative overflow-hidden">
       <div className="absolute inset-0 w-full h-full z-0 bg-gray-200">
@@ -73,8 +78,20 @@ function MainDesktop() {
       <div className="absolute inset-0 bg-white/20 z-10" />
 
       <div className="relative z-20 flex flex-col min-h-screen">
-        <div className="w-full h-10 sm:h-10 bg-white border-b border-gray-300 flex items-center px-2 sm:px-4 font-bold text-gray-700 shadow-sm text-base sm:text-lg">
-          Welcome to Matas CV desktop!
+        {/* TOP BAR - FLAT, NO ROUNDED CORNERS */}
+        <div
+          className="w-full h-10 sm:h-10 bg-white/70 backdrop-blur-md border-b border-gray-300 flex items-center px-2 sm:px-4 font-bold text-gray-700 shadow-sm text-base sm:text-lg"
+          style={{
+            borderRadius: 0,
+            boxShadow: "0 4px 24px 0 rgba(0,0,0,0.10)",
+            borderBottom: "1.5px solid #d1d5db",
+          }}
+        >
+          <span className="font-semibold tracking-wide select-none">
+            <span className="inline-block align-middle mr-2">🐧</span>
+            Linux Desktop
+          </span>
+          <SystemTray />
         </div>
 
         <Desktop

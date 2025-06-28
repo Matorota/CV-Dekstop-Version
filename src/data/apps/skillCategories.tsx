@@ -31,7 +31,6 @@ import {
   SiCplusplus,
   SiDocker,
   SiVercel,
-  SiJavascript,
 } from "react-icons/si";
 
 const skillCategories = [

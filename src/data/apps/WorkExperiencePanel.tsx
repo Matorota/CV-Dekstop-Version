@@ -6,7 +6,6 @@ export default function WorkExperiencePanel() {
     <div className="p-2 w-full max-w-full md:max-w-2xl">
       <h2 className="text-xl font-bold mb-4">Experience</h2>
       <div className="flex flex-col gap-4">
-        {/* Edigino */}
         <div className="flex flex-row items-start gap-3 mb-2">
           <img
             src={ediginoLogo}
@@ -33,7 +32,6 @@ export default function WorkExperiencePanel() {
             </div>
           </div>
         </div>
-        {/* Security Guard */}
         <div className="flex flex-row items-start gap-3 mb-2">
           <img
             src="https://placehold.co/48x48/png"
@@ -62,7 +60,6 @@ export default function WorkExperiencePanel() {
             </div>
           </div>
         </div>
-        {/* Kauno Grūdai */}
         <div className="flex flex-row items-start gap-3 mb-2">
           <img
             src={kaunoGrudaiLogo}
