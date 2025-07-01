@@ -1,5 +1,4 @@
 import React from "react";
-import tuxImg from "../assets/tux.png";
 import { apps } from "../data/apps/index";
 
 type TaskbarProps = {
@@ -34,9 +33,10 @@ export default function Taskbar({
         className={`mr-4 flex items-center justify-center rounded-full hover:bg-blue-100 transition p-1 ${
           linuxMenu ? "ring-2 ring-blue-400" : ""
         }`}
-        style={{ width: 38, height: 38 }}
+        style={{ width: 38, height: 38, fontSize: 28 }}
+        aria-label="Linux Menu"
       >
-        <img src={tuxImg} alt="Linux" className="h-8 w-8 object-contain" />
+        🐧
       </button>
       <div className="flex flex-row gap-2">
         {openApps.map((name) => {
@@ -75,7 +75,6 @@ export default function Taskbar({
         })}
       </div>
       <div className="flex-1" />
-      {/* Optionally, you can add a clock here too */}
       <div className="text-gray-700 font-mono text-xs sm:text-sm px-2 sm:px-3 select-none">
         {time}
       </div>

@@ -9,7 +9,7 @@ export default function GithubPanel() {
         </span>
       </div>
 
-      <h2 className="text-xl font-bold mb-2">Pinned Projects</h2>
+      <h2 className="text-xl font-bold mb-2">Main Projects</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 w-full">
         {githubProjects.map((proj) => (
           <div
