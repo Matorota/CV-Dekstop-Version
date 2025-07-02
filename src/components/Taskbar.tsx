@@ -7,6 +7,7 @@ type TaskbarProps = {
   linuxMenu: boolean;
   onCloseApp: (name: string) => void;
   time: string;
+  onOpenTerminal: () => void; // Add this prop
 };
 
 export default function Taskbar({
@@ -14,6 +15,7 @@ export default function Taskbar({
   onLinuxClick,
   linuxMenu,
   time,
+  onOpenTerminal, // Add this prop
 }: TaskbarProps) {
   const minimized: string[] = (window as any).__minimizedApps || [];
   const restoreMinimizedApp: (name: string) => void =
@@ -37,6 +39,16 @@ export default function Taskbar({
         aria-label="Linux Menu"
       >
         🐧
+      </button>
+      {/* Terminal button */}
+      <button
+        onClick={onOpenTerminal}
+        className="flex items-center justify-center rounded hover:bg-blue-100 transition p-1 mr-2"
+        style={{ width: 38, height: 38, fontSize: 22 }}
+        aria-label="Open Terminal"
+        title="Open Terminal"
+      >
+        🖥️
       </button>
       <div className="flex flex-row gap-2">
         {openApps.map((name) => {

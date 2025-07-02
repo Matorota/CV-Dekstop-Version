@@ -5,6 +5,7 @@ import Taskbar from "./components/Taskbar";
 import LogOut from "./pages/LogOut";
 import Restart from "./pages/Restart";
 import Sleep from "./pages/Sleep";
+import TerminalPanel from "./components/Terminal/TerminalPanel";
 
 import bg1 from "./assets/background1.jpg";
 import bg2 from "./assets/background2.jpg";
@@ -17,6 +18,7 @@ const backgrounds = [bg1, bg2, bg3];
 function MainDesktop() {
   const [openApps, setOpenApps] = useState<string[]>([]);
   const [linuxMenu, setLinuxMenu] = useState(false);
+  const [showTerminal, setShowTerminal] = useState(false);
 
   const [bgIndex, setBgIndex] = useState(0);
 
@@ -54,9 +56,22 @@ function MainDesktop() {
 
   const handleLinuxClick = () => setLinuxMenu((prev) => !prev);
 
-  // --- SYSTEM TRAY MOCKUP ---
+  // Terminal handlers
+  const handleOpenTerminal = () => setShowTerminal(true);
+  const handleCloseTerminal = () => setShowTerminal(false);
+
   const SystemTray = () => (
-    <div className="flex items-center gap-4 ml-auto"></div>
+    <div className="flex items-center gap-4 ml-auto">
+      {/* Terminal button */}
+      <button
+        onClick={handleOpenTerminal}
+        className="hover:bg-blue-100 rounded p-1"
+        title="Open Terminal"
+      >
+        <span className="text-xl">🖥️</span>
+      </button>
+      {/* ...other tray icons can go here... */}
+    </div>
   );
 
   return (
@@ -78,7 +93,7 @@ function MainDesktop() {
       <div className="absolute inset-0 bg-white/20 z-10" />
 
       <div className="relative z-20 flex flex-col min-h-screen">
-        {/* TOP BAR - FLAT, NO ROUNDED CORNERS */}
+        {/* TOP BAR */}
         <div
           className="w-full h-10 sm:h-10 bg-white/70 backdrop-blur-md border-b border-gray-300 flex items-center px-2 sm:px-4 font-bold text-gray-700 shadow-sm text-base sm:text-lg"
           style={{
@@ -94,6 +109,15 @@ function MainDesktop() {
           <SystemTray />
         </div>
 
+        {/* Terminal Popup */}
+        {showTerminal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+            <div className="w-full max-w-2xl h-[60vh]">
+              <TerminalPanel onClose={handleCloseTerminal} />
+            </div>
+          </div>
+        )}
+
         <Desktop
           openApps={openApps}
           onAppClick={handleAppClick}
@@ -107,6 +131,7 @@ function MainDesktop() {
           linuxMenu={linuxMenu}
           onCloseApp={handleCloseApp}
           time={time}
+          onOpenTerminal={handleOpenTerminal} // Pass handler to Taskbar
         />
       </div>
     </div>
