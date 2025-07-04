@@ -1,29 +1,90 @@
 import { useRef, useState } from "react";
 import TerminalInput from "./TerminalInput";
 
+type TerminalLine = { type: "input" | "output"; text: string };
+
 export default function TerminalPanel({ onClose }: { onClose: () => void }) {
-  const [lines, setLines] = useState<string[]>([
-    "Welcome to the Linux Terminal! Type 'help' for commands.",
+  const [lines, setLines] = useState<TerminalLine[]>([
+    { type: "output", text: "Welcome to the Linux Terminal! Type 'help'." },
   ]);
+  const [cwd, setCwd] = useState<string>("/home/user");
+  const [isUpdating, setIsUpdating] = useState(false);
   const terminalRef = useRef<HTMLDivElement>(null);
 
-  const handleCommand = (cmd: string) => {
-    let output = "";
-    if (cmd === "help") {
-      output = "Available commands: help, clear, echo, date";
-    } else if (cmd === "clear") {
+  const commands = {
+    help: "Available commands: help, clear, echo, date, whoami, pwd, ls, cd, sudo, update, exit",
+    whoami: "user",
+    pwd: () => cwd,
+    ls: () =>
+      cwd === "/"
+        ? "home  etc  var  usr  bin"
+        : "projects  documents  downloads",
+    cd: (arg: string) => {
+      if (arg === "/" || arg === "/home" || arg === "/home/user") {
+        setCwd(arg === "/" ? "/" : "/home/user");
+        return "";
+      }
+      if (arg === "..") {
+        setCwd("/");
+        return "";
+      }
+      if (arg === "projects") {
+        setCwd("/home/user/projects");
+        return "";
+      }
+      return `bash: cd: ${arg}: No such file or directory`;
+    },
+    sudo: (arg: string) =>
+      arg === "reboot"
+        ? "Rebooting... (simulated)"
+        : "Permission denied: you are not in the sudoers file.",
+    update: async () => {
+      setIsUpdating(true);
+      setLines((prev) => [
+        ...prev,
+        { type: "output", text: "Updating system..." },
+      ]);
+      await new Promise((r) => setTimeout(r, 1500));
+      setLines((prev) => [
+        ...prev,
+        { type: "output", text: "All packages are up to date." },
+      ]);
+      setIsUpdating(false);
+      return "";
+    },
+    exit: () => {
+      onClose();
+      return "";
+    },
+  };
+
+  const handleCommand = async (cmd: string) => {
+    setLines((prev) => [...prev, { type: "input", text: `$ ${cmd}` }]);
+    if (cmd === "clear") {
       setLines([]);
       return;
-    } else if (cmd.startsWith("echo ")) {
-      output = cmd.slice(5);
-    } else if (cmd === "date") {
-      output = new Date().toString();
-    } else if (cmd.trim() === "") {
-      output = "";
-    } else {
-      output = `Command not found: ${cmd}`;
     }
-    setLines((prev) => [...prev, `$ ${cmd}`, output]);
+    const [command, ...args] = cmd.split(" ");
+    if (command in commands) {
+      const fn = commands[command as keyof typeof commands];
+      let output = "";
+      if (typeof fn === "function") {
+        output = await fn(args.join(" "));
+      } else {
+        output = fn;
+      }
+      if (output)
+        setLines((prev) => [...prev, { type: "output", text: output }]);
+    } else if (command === "echo") {
+      setLines((prev) => [...prev, { type: "output", text: args.join(" ") }]);
+    } else if (cmd.trim() === "") {
+      setLines((prev) => [...prev, { type: "output", text: "" }]);
+    } else {
+      setLines((prev) => [
+        ...prev,
+        { type: "output", text: `bash: ${command}: command not found` },
+      ]);
+    }
     setTimeout(() => {
       terminalRef.current?.scrollTo(0, terminalRef.current.scrollHeight);
     }, 10);
@@ -50,10 +111,30 @@ export default function TerminalPanel({ onClose }: { onClose: () => void }) {
         style={{ background: "black" }}
       >
         {lines.map((line, i) => (
-          <div key={i}>{line}</div>
+          <div
+            key={i}
+            className={line.type === "input" ? "text-green-400" : ""}
+          >
+            {line.type === "input" ? (
+              <span>
+                <span className="text-blue-400">{cwd}</span> {line.text}
+              </span>
+            ) : (
+              line.text
+            )}
+          </div>
         ))}
+        {isUpdating && (
+          <div className="text-yellow-400">
+            Downloading packages... (simulated)
+          </div>
+        )}
       </div>
-      <TerminalInput onCommand={handleCommand} />
+      <TerminalInput
+        onCommand={handleCommand}
+        cwd={cwd}
+        disabled={isUpdating}
+      />
     </div>
   );
 }
