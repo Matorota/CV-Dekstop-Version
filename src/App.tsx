@@ -56,22 +56,11 @@ function MainDesktop() {
 
   const handleLinuxClick = () => setLinuxMenu((prev) => !prev);
 
-  // Terminal handlers
   const handleOpenTerminal = () => setShowTerminal(true);
   const handleCloseTerminal = () => setShowTerminal(false);
 
   const SystemTray = () => (
-    <div className="flex items-center gap-4 ml-auto">
-      {/* Terminal button */}
-      <button
-        onClick={handleOpenTerminal}
-        className="hover:bg-blue-100 rounded p-1"
-        title="Open Terminal"
-      >
-        <span className="text-xl">🖥️</span>
-      </button>
-      {/* ...other tray icons can go here... */}
-    </div>
+    <div className="flex items-center gap-4 ml-auto"></div>
   );
 
   return (
@@ -109,7 +98,6 @@ function MainDesktop() {
           <SystemTray />
         </div>
 
-        {/* Terminal Popup */}
         {showTerminal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
             <div className="w-full max-w-2xl h-[60vh]">
@@ -131,7 +119,7 @@ function MainDesktop() {
           linuxMenu={linuxMenu}
           onCloseApp={handleCloseApp}
           time={time}
-          onOpenTerminal={handleOpenTerminal} // Pass handler to Taskbar
+          onOpenTerminal={handleOpenTerminal}
         />
       </div>
     </div>
