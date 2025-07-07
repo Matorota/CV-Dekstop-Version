@@ -27,6 +27,7 @@ export default function EmailPanel() {
 
   return (
     <div className="flex flex-col items-start gap-2 p-4 w-full max-w-md">
+      <div> Demo version</div>
       <form onSubmit={handleSend} className="flex flex-col gap-3 w-full">
         <label className="text-sm font-semibold text-gray-700">
           Your Name
