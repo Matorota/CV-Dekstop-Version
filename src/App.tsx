@@ -91,8 +91,12 @@ function MainDesktop() {
           }}
         >
           <span className="font-semibold tracking-wide select-none">
-            <span className="inline-block align-middle mr-2">🐧</span>
-            Linux Desktop
+            <img
+              src="/arch-logo.svg"
+              alt="Arch Linux"
+              className="w-6 h-6 inline-block mr-2"
+            />
+            Arch Linux Desktop
           </span>
           <SystemTray />
         </div>
