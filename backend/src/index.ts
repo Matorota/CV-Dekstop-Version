@@ -1,74 +1,108 @@
-import express from "express";
+import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";
-import { Resend } from "resend";
+import nodemailer from "nodemailer";
 import dotenv from "dotenv";
 
 dotenv.config();
 
 const app = express();
 
-// Allow all origins for simplicity
+// Add more detailed CORS configuration
 app.use(
   cors({
-    origin: "*",
+    origin: ["http://localhost:5173", "http://localhost:3000"],
+    methods: ["GET", "POST"],
+    credentials: true,
   })
 );
 app.use(express.json());
 
-const resendApiKey = process.env.RESEND_API_KEY;
-if (!resendApiKey) {
-  throw new Error("RESEND_API_KEY is not set in environment variables");
-}
-const resend = new Resend(resendApiKey);
+// Debug middleware to log all requests
+app.use((req: Request, res: Response, next: NextFunction) => {
+  console.log(`${new Date().toISOString()} [${req.method}] ${req.url}`);
+  console.log("Request body:", req.body);
+  next();
+});
 
-app.post("/api/send-email", async (req, res) => {
-  try {
-    const { name, email, message } = req.body;
-    if (
-      typeof name !== "string" ||
-      typeof email !== "string" ||
-      typeof message !== "string" ||
-      !name.trim() ||
-      !email.trim() ||
-      !message.trim()
-    ) {
-      return res.status(400).json({ error: "Missing or invalid fields" });
-    }
+// Create email transporter
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+  tls: {
+    rejectUnauthorized: false,
+  },
+});
 
-    const result = await resend.emails.send({
-      from: "CV Contact <onboarding@resend.dev>",
-      to: ["matasmatasp@gmail.com"],
-      subject: `CV Contact from ${name}`,
-      html: `<div>
-        <p><strong>From:</strong> ${name} (${email})</p>
-        <p><strong>Message:</strong></p>
-        <p>${message.replace(/\n/g, "<br/>")}</p>
-      </div>`,
-      text: `From: ${name} <${email}>\n\n${message}`,
-      reply_to: email,
-    });
-
-    if (result && result.error) {
-      console.error("Email send error:", result.error);
-      return res.status(500).json({ error: "Failed to send email" });
-    }
-
-    return res.json({ success: true });
-  } catch (err) {
-    console.error("Email send error:", err);
-    return res.status(500).json({ error: "Failed to send email" });
+// Verify email configuration on startup
+transporter.verify((error, success) => {
+  if (error) {
+    console.error("Email configuration error:", error);
+  } else {
+    console.log("Email server is ready to send messages");
   }
 });
 
-app.get("/api/hello", async (_req, res) => {
-  try {
-    return res.json({ message: "Hello from TypeScript backend!" });
-  } catch (err) {
-    return res.status(500).json({ error: "Internal server error" });
-  }
+// Health check endpoint
+app.get("/check", (req: Request, res: Response) => {
+  res.json({ ok: true, message: "Email service is ready" });
 });
 
-const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 5000;
+// Email sending endpoint - Fixed typing
+app.post("/send-email", (req: Request, res: Response) => {
+  const handleEmail = async () => {
+    try {
+      console.log("Received email request:", req.body);
+      const { name, email, message } = req.body;
+
+      if (!name?.trim() || !email?.trim() || !message?.trim()) {
+        return res.status(400).json({ error: "Missing required fields" });
+      }
+
+      const mailOptions = {
+        from: `"CV Contact Form" <${process.env.EMAIL_USER}>`,
+        to: "matasmatasp@gmail.com",
+        replyTo: email,
+        subject: `CV Contact from ${name}`,
+        text: `From: ${name} <${email}>\n\nMessage:\n${message}`,
+        html: `
+          <div style="font-family: Arial, sans-serif; padding: 20px;">
+            <h2 style="color: #2563eb;">New Contact Form Message</h2>
+            <p><strong>From:</strong> ${name} (${email})</p>
+            <p><strong>Message:</strong></p>
+            <div style="background: #f3f4f6; padding: 15px; border-radius: 5px;">
+              ${message.replace(/\n/g, "<br/>")}
+            </div>
+          </div>
+        `,
+      };
+
+      const info = await transporter.sendMail(mailOptions);
+      console.log("Email sent:", info.messageId);
+
+      return res.json({ success: true, messageId: info.messageId });
+    } catch (error) {
+      console.error("Failed to send email:", error);
+      return res.status(500).json({
+        error: "Failed to send email",
+        details: error instanceof Error ? error.message : String(error),
+      });
+    }
+  };
+
+  handleEmail().catch((error) => {
+    console.error("Unhandled error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  });
+});
+
+const PORT = 5000;
 app.listen(PORT, () => {
-  console.log(`Backend running on http://localhost:${PORT}`);
+  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Email service configured for: ${process.env.EMAIL_USER}`);
 });

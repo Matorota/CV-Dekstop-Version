@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { sendEmail } from "../../api/email";
 
 export default function EmailPanel() {
   const [form, setForm] = useState({
@@ -10,6 +11,12 @@ export default function EmailPanel() {
   const [sent, setSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [backendStatus] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Optionally, implement backend check here if needed
+    // setBackendStatus("Backend check not implemented.");
+  }, []);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -22,15 +29,7 @@ export default function EmailPanel() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch("/api/send-email", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data.error || "Failed to send");
-      }
+      await sendEmail(form);
       setSent(true);
       setForm({ name: "", email: "", message: "" });
       setTimeout(() => setSent(false), 3000);
@@ -40,6 +39,7 @@ export default function EmailPanel() {
           ? "Could not connect to backend. Please try again later."
           : "Failed to send message. Please try again."
       );
+      console.error("Send email error:", err);
     } finally {
       setLoading(false);
     }
@@ -47,6 +47,11 @@ export default function EmailPanel() {
 
   return (
     <div className="flex flex-col items-start gap-2 p-4 w-full max-w-md">
+      {backendStatus && (
+        <div className="text-red-600 text-sm mb-2">
+          Backend/API error: {backendStatus}
+        </div>
+      )}
       <form onSubmit={handleSend} className="flex flex-col gap-3 w-full">
         <label className="text-sm font-semibold text-gray-700">
           Your Name
@@ -70,7 +75,7 @@ export default function EmailPanel() {
             value={form.email}
             onChange={handleChange}
             className="mt-1 w-full px-2 py-1 border rounded bg-white"
-            placeholder="your@email.com"
+            placeholder="Your email"
             disabled={loading}
           />
         </label>
@@ -83,14 +88,14 @@ export default function EmailPanel() {
             onChange={handleChange}
             className="mt-1 w-full px-2 py-1 border rounded bg-white"
             rows={4}
-            placeholder="Your message"
+            placeholder="Write your message"
             disabled={loading}
           />
         </label>
         <button
           type="submit"
           className="bg-blue-700 text-white font-bold px-4 py-2 rounded hover:bg-blue-800 transition"
-          disabled={loading}
+          disabled={loading || !!backendStatus}
         >
           {loading ? "Sending..." : "Send"}
         </button>

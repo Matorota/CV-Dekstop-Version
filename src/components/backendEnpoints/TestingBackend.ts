@@ -5,7 +5,7 @@ export default function TestingBackend() {
   const [msg, setMsg] = useState("");
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/hello")
+    fetch("/api/hello")
       .then((res) => res.json())
       .then((data) => setMsg(data.message));
   }, []);
