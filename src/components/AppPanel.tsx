@@ -1,6 +1,7 @@
 import { Rnd } from "react-rnd";
 import type { ReactNode } from "react";
 import { useState } from "react";
+import { useTheme } from "next-themes";
 
 type AppPanelProps = {
   name: string;
@@ -22,6 +23,7 @@ export default function AppPanel({
   defaultWidth,
   defaultHeight,
 }: AppPanelProps) {
+  const { theme } = useTheme();
   const isMobile = typeof window !== "undefined" && window.innerWidth < 640;
   const [maximized, setMaximized] = useState(isMobile);
 
@@ -47,8 +49,20 @@ export default function AppPanel({
       enableResizing={!isMobile && !maximized}
       disableDragging={isMobile || maximized}
     >
-      <div className="bg-white/90 rounded-xl shadow-2xl border-2 border-blue-300 cursor-default h-full">
-        <div className="window-titlebar flex items-center justify-between px-2 sm:px-4 py-2 bg-blue-100 rounded-t-xl border-b border-blue-300 cursor-move select-none text-sm sm:text-lg">
+      <div
+        className={`${
+          theme === "dark"
+            ? "bg-gray-800/90 border-gray-600"
+            : "bg-white/90 border-blue-300"
+        } rounded-xl shadow-2xl border-2 cursor-default h-full`}
+      >
+        <div
+          className={`window-titlebar flex items-center justify-between px-2 sm:px-4 py-2 ${
+            theme === "dark"
+              ? "bg-gray-700 text-white border-gray-600"
+              : "bg-blue-100 text-blue-900 border-blue-300"
+          } rounded-t-xl border-b cursor-move select-none text-sm sm:text-lg`}
+        >
           <span className="font-bold text-blue-900 truncate">{name}</span>
           <div className="flex items-center gap-2">
             <button

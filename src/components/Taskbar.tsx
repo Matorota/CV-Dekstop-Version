@@ -16,14 +16,19 @@ export default function Taskbar({
   linuxMenu,
   time,
   onOpenTerminal, // Add this prop
-}: TaskbarProps) {
+  theme,
+}: TaskbarProps & { theme: "light" | "dark" }) {
   const minimized: string[] = (window as any).__minimizedApps || [];
   const restoreMinimizedApp: (name: string) => void =
     (window as any).__restoreMinimizedApp || (() => {});
 
   return (
     <div
-      className="w-full h-12 bg-white/60 backdrop-blur-md border-t border-gray-200 flex items-center px-4 shadow-2xl fixed bottom-0 left-0 z-40"
+      className={`w-full h-12 ${
+        theme === "dark"
+          ? "bg-gray-900/70 border-gray-700 text-white"
+          : "bg-white/60 border-gray-200 text-gray-700"
+      } backdrop-blur-md border-t flex items-center px-4 shadow-2xl fixed bottom-0 left-0 z-40`}
       style={{
         borderRadius: 0,
         boxShadow: "0 4px 24px 0 rgba(0,0,0,0.15)",

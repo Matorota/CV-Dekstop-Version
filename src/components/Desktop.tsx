@@ -10,13 +10,16 @@ type DesktopProps = {
   onAppClick: (name: string) => void;
   onCloseApp: (name: string) => void;
   linuxMenu: boolean;
+  onOpenTerminal: () => void; // Add this prop
+  onOpenSettings: () => void; // Add this prop
 };
-
 export default function Desktop({
   openApps,
   onAppClick,
   onCloseApp,
   linuxMenu,
+  onOpenTerminal, // Add this prop
+  onOpenSettings, // Add this prop
 }: DesktopProps) {
   const [minimized, setMinimized] = useState<string[]>([]);
 
@@ -67,8 +70,11 @@ export default function Desktop({
         );
       })}
 
-      <LinuxMenu visible={linuxMenu} />
-
+      <LinuxMenu
+        visible={linuxMenu}
+        onOpenTerminal={onOpenTerminal}
+        onOpenSettings={onOpenSettings}
+      />
       <TaskbarRestoreHandler minimized={minimized} onRestore={handleRestore} />
     </div>
   );
