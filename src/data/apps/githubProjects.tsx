@@ -37,6 +37,14 @@ const githubProjects = [
       "This interactive CV desktop project (you're viewing it now!).",
     tech: "TypeScript, React, TailwindCSS",
   },
+  {
+    name: "MERN-ClothingStore",
+    url: "https://github.com/Matorota/MERN-ClothingStore",
+    icon: <SiTypescript className="text-blue-400" size={24} />,
+    description:
+      "Full-stack e-commerce clothing store built with MERN stack and TypeScript.",
+    tech: "MongoDB, Express.js, React, Node.js, TypeScript",
+  },
 ];
 
 export default githubProjects;

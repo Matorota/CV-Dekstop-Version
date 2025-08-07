@@ -3,13 +3,17 @@ import {
   FaCode,
   FaDatabase,
   FaTools,
-  FaUserShield,
   FaLock,
   FaCuttlefish,
   FaJava,
   FaPython,
   FaJs,
   FaGitAlt,
+  FaBuilding,
+  FaIndustry,
+  FaFileWord,
+  FaFileExcel,
+  FaFilePowerpoint,
 } from "react-icons/fa";
 import {
   SiHtml5,
@@ -31,6 +35,10 @@ import {
   SiCplusplus,
   SiDocker,
   SiVercel,
+  SiExpress,
+  SiRedux,
+  SiAutodesk,
+  SiAdobephotoshop,
 } from "react-icons/si";
 
 const skillCategories = [
@@ -66,6 +74,10 @@ const skillCategories = [
         name: "Figma",
         icon: <SiFigma className="text-orange-400" size={22} />,
       },
+      {
+        name: "Redux",
+        icon: <SiRedux className="text-purple-600" size={22} />,
+      },
     ],
   },
   {
@@ -88,6 +100,10 @@ const skillCategories = [
         icon: <SiDotnet className="text-purple-700" size={22} />,
       },
       { name: "Oracle", icon: <SiOracle className="text-red-700" size={22} /> },
+      {
+        name: "Express.js",
+        icon: <SiExpress className="text-gray-700" size={22} />,
+      },
     ],
   },
   {
@@ -107,7 +123,7 @@ const skillCategories = [
     ],
   },
   {
-    name: "DevOps & Tools",
+    name: "DevOps & Development Tools",
     icon: <FaTools className="text-gray-700" size={22} />,
     skills: [
       { name: "Git", icon: <FaGitAlt className="text-red-600" size={22} /> },
@@ -120,23 +136,38 @@ const skillCategories = [
     ],
   },
   {
-    name: "Security",
-    icon: <FaUserShield className="text-blue-900" size={22} />,
+    name: "Professional Tools",
+    icon: <FaTools className="text-blue-700" size={22} />,
     skills: [
       {
-        name: "Cybersecurity",
-        icon: <FaLock className="text-blue-900" size={22} />,
+        name: "Microsoft Office",
+        icon: <FaFileWord className="text-blue-700" size={22} />,
       },
       {
-        name: "Building Security",
-        icon: <FaLock className="text-gray-700" size={22} />,
+        name: "Word",
+        icon: <FaFileWord className="text-blue-700" size={22} />,
       },
-      { name: "Patrol", icon: <FaLock className="text-gray-700" size={22} /> },
+      {
+        name: "Excel",
+        icon: <FaFileExcel className="text-green-700" size={22} />,
+      },
+      {
+        name: "PowerPoint",
+        icon: <FaFilePowerpoint className="text-orange-600" size={22} />,
+      },
+      {
+        name: "AutoCAD",
+        icon: <SiAutodesk className="text-red-500" size={22} />,
+      },
+      {
+        name: "Photoshop",
+        icon: <SiAdobephotoshop className="text-blue-800" size={22} />,
+      },
     ],
   },
   {
     name: "Operations",
-    icon: <FaCuttlefish className="text-gray-700" size={22} />,
+    icon: <FaIndustry className="text-gray-700" size={22} />,
     skills: [
       {
         name: "Machine Operation",
@@ -145,6 +176,14 @@ const skillCategories = [
       {
         name: "Elevator Maintenance",
         icon: <FaCuttlefish className="text-gray-700" size={22} />,
+      },
+      {
+        name: "Building Security",
+        icon: <FaBuilding className="text-blue-900" size={22} />,
+      },
+      {
+        name: "Patrol",
+        icon: <FaLock className="text-gray-700" size={22} />,
       },
     ],
   },
