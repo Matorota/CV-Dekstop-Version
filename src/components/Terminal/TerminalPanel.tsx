@@ -1,9 +1,11 @@
 import { useRef, useState } from "react";
 import TerminalInput from "./TerminalInput";
+import { useTheme } from "../../context/ThemeContext"; // Fixed import path
 
 type TerminalLine = { type: "input" | "output"; text: string };
 
 export default function TerminalPanel({ onClose }: { onClose: () => void }) {
+  const { theme } = useTheme(); // Add this line
   const [lines, setLines] = useState<TerminalLine[]>([
     { type: "output", text: "Welcome to the Linux Terminal! Type 'help'." },
   ]);
@@ -92,10 +94,19 @@ export default function TerminalPanel({ onClose }: { onClose: () => void }) {
 
   return (
     <div
-      className="w-full h-full flex flex-col bg-black text-green-300 border border-gray-700"
-      style={{ minWidth: 320, minHeight: 200 }}
+      className={`w-full h-full flex flex-col ${
+        theme === "dark" ? "bg-gray-900" : "bg-gray-800"
+      } text-green-300 border ${
+        theme === "dark" ? "border-gray-700" : "border-gray-600"
+      }`}
     >
-      <div className="h-8 bg-gray-900 text-white flex items-center px-3 border-b border-gray-700 select-none">
+      <div
+        className={`h-8 ${
+          theme === "dark" ? "bg-gray-800" : "bg-gray-700"
+        } text-white flex items-center px-3 border-b ${
+          theme === "dark" ? "border-gray-700" : "border-gray-600"
+        } select-none`}
+      >
         <span className="font-mono text-sm flex-1">Terminal</span>
         <button
           onClick={onClose}

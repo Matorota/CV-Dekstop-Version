@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider, useTheme } from "./context/ThemeContext";
+import { SettingsProvider } from "./context/SettingsContext";
 import Desktop from "./components/Desktop";
 import Taskbar from "./components/Taskbar";
 import LogOut from "./pages/LogOut";
@@ -158,14 +159,16 @@ function MainDesktop() {
 export default function App() {
   return (
     <ThemeProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<MainDesktop />} />
-          <Route path="/logout" element={<LogOut />} />
-          <Route path="/restart" element={<Restart />} />
-          <Route path="/sleep" element={<Sleep />} />
-        </Routes>
-      </BrowserRouter>
+      <SettingsProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<MainDesktop />} />
+            <Route path="/logout" element={<LogOut />} />
+            <Route path="/restart" element={<Restart />} />
+            <Route path="/sleep" element={<Sleep />} />
+          </Routes>
+        </BrowserRouter>
+      </SettingsProvider>
     </ThemeProvider>
   );
 }

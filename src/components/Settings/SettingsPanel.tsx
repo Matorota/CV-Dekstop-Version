@@ -10,51 +10,73 @@ export default function SettingsPanel({ onClose }: SettingsPanelProps) {
   const [activeTab, setActiveTab] = useState("appearance");
 
   return (
-    <div className="w-full h-full flex flex-col bg-white rounded-lg overflow-hidden">
-      <div className="h-12 bg-gray-100 flex items-center px-4 border-b">
-        <h2 className="text-lg font-semibold flex-1">System Settings</h2>
-        <button onClick={onClose} className="text-gray-500 hover:text-red-500">
+    <div
+      className={`w-full h-full flex flex-col ${
+        theme === "dark" ? "bg-gray-800" : "bg-white"
+      } rounded-lg overflow-hidden`}
+    >
+      <div
+        className={`h-12 ${
+          theme === "dark" ? "bg-gray-900" : "bg-gray-100"
+        } flex items-center px-4 border-b ${
+          theme === "dark" ? "border-gray-700" : "border-gray-200"
+        }`}
+      >
+        <h2
+          className={`text-lg font-semibold flex-1 ${
+            theme === "dark" ? "text-gray-200" : "text-gray-800"
+          }`}
+        >
+          System Settings
+        </h2>
+        <button
+          onClick={onClose}
+          className={`${
+            theme === "dark"
+              ? "text-gray-400 hover:text-red-400"
+              : "text-gray-500 hover:text-red-500"
+          }`}
+        >
           ×
         </button>
       </div>
 
       <div className="flex flex-1">
-        <div className="w-48 border-r bg-gray-50 p-4">
+        <div
+          className={`w-48 border-r ${
+            theme === "dark"
+              ? "bg-gray-900 border-gray-700"
+              : "bg-gray-50 border-gray-200"
+          } p-4`}
+        >
           <div className="space-y-2">
-            <button
-              onClick={() => setActiveTab("system")}
-              className={`w-full text-left px-3 py-2 rounded ${
-                activeTab === "system"
-                  ? "bg-blue-100 text-blue-700"
-                  : "hover:bg-gray-100"
-              }`}
-            >
-              System
-            </button>
-            <button
-              onClick={() => setActiveTab("appearance")}
-              className={`w-full text-left px-3 py-2 rounded ${
-                activeTab === "appearance"
-                  ? "bg-blue-100 text-blue-700"
-                  : "hover:bg-gray-100"
-              }`}
-            >
-              Appearance
-            </button>
-            <button
-              onClick={() => setActiveTab("about")}
-              className={`w-full text-left px-3 py-2 rounded ${
-                activeTab === "about"
-                  ? "bg-blue-100 text-blue-700"
-                  : "hover:bg-gray-100"
-              }`}
-            >
-              About
-            </button>
+            {["system", "appearance", "about", "display"].map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`w-full text-left px-3 py-2 rounded transition-colors ${
+                  activeTab === tab
+                    ? theme === "dark"
+                      ? "bg-gray-700 text-blue-400"
+                      : "bg-blue-100 text-blue-700"
+                    : theme === "dark"
+                    ? "text-gray-400 hover:bg-gray-800"
+                    : "hover:bg-gray-100"
+                }`}
+              >
+                {tab.charAt(0).toUpperCase() + tab.slice(1)}
+              </button>
+            ))}
           </div>
         </div>
 
-        <div className="flex-1 p-6">
+        <div
+          className={`flex-1 p-6 ${
+            theme === "dark"
+              ? "bg-gray-800 text-gray-200"
+              : "bg-white text-gray-800"
+          }`}
+        >
           {activeTab === "system" && (
             <div className="space-y-6">
               <h3 className="text-lg font-semibold">System Information</h3>
@@ -90,7 +112,11 @@ export default function SettingsPanel({ onClose }: SettingsPanelProps) {
                     Theme Mode
                   </label>
                   <select
-                    className="w-48 border rounded p-1"
+                    className={`w-48 border rounded p-2 ${
+                      theme === "dark"
+                        ? "bg-gray-700 border-gray-600 text-gray-200"
+                        : "bg-white border-gray-300"
+                    }`}
                     value={theme}
                     onChange={toggleTheme}
                   >
@@ -116,6 +142,45 @@ export default function SettingsPanel({ onClose }: SettingsPanelProps) {
                   <strong>License:</strong> MIT
                 </p>
                 <p className="mt-4">Built with React + TypeScript + Vite</p>
+              </div>
+            </div>
+          )}
+
+          {activeTab === "display" && (
+            <div className="space-y-6">
+              <h3 className="text-lg font-semibold">Display Settings</h3>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">
+                    Resolution
+                  </label>
+                  <select className="w-48 border rounded p-1">
+                    <option>3840x2160 (4K)</option>
+                    <option>2560x1440 (2K)</option>
+                    <option>1920x1080 (FHD)</option>
+                    <option>1366x768 (HD)</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">
+                    Refresh Rate
+                  </label>
+                  <select className="w-48 border rounded p-1">
+                    <option>144 Hz</option>
+                    <option>120 Hz</option>
+                    <option>60 Hz</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">
+                    Scale
+                  </label>
+                  <select className="w-48 border rounded p-1">
+                    <option>100%</option>
+                    <option>125%</option>
+                    <option>150%</option>
+                  </select>
+                </div>
               </div>
             </div>
           )}

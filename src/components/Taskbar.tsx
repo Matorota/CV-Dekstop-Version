@@ -1,5 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { apps } from "../data/apps/index";
+import { FaCog } from "react-icons/fa";
+import TaskbarSettings from "./TaskbarSettings";
+import { useTheme } from "../context/ThemeContext";
 
 type TaskbarProps = {
   openApps: string[];
@@ -7,47 +10,37 @@ type TaskbarProps = {
   linuxMenu: boolean;
   onCloseApp: (name: string) => void;
   time: string;
-  onOpenTerminal: () => void; // Add this prop
+  onOpenTerminal: () => void;
+  theme: "light" | "dark";
 };
 
-export default function Taskbar({
-  openApps,
-  onLinuxClick,
-  linuxMenu,
-  time,
-  onOpenTerminal, // Add this prop
-  theme,
-}: TaskbarProps & { theme: "light" | "dark" }) {
+export default function Taskbar({ ...props }: TaskbarProps) {
+  const { theme } = useTheme();
+  const [showSettings, setShowSettings] = useState(false);
   const minimized: string[] = (window as any).__minimizedApps || [];
   const restoreMinimizedApp: (name: string) => void =
     (window as any).__restoreMinimizedApp || (() => {});
 
   return (
     <div
-      className={`w-full h-12 ${
+      className={`w-full h-12 fixed bottom-0 left-0 z-40 ${
         theme === "dark"
-          ? "bg-gray-900/70 border-gray-700 text-white"
-          : "bg-white/60 border-gray-200 text-gray-700"
-      } backdrop-blur-md border-t flex items-center px-4 shadow-2xl fixed bottom-0 left-0 z-40`}
-      style={{
-        borderRadius: 0,
-        boxShadow: "0 4px 24px 0 rgba(0,0,0,0.15)",
-        borderTop: "1.5px solid #d1d5db",
-      }}
+          ? "bg-gray-900/95 border-gray-700 text-gray-200"
+          : "bg-white/95 border-gray-200 text-gray-700"
+      } backdrop-blur-md border-t flex items-center px-4 transition-colors duration-200`}
     >
       <button
-        onClick={onLinuxClick}
-        className={`mr-4 flex items-center justify-center rounded-full hover:bg-blue-100 transition p-1 ${
-          linuxMenu ? "ring-2 ring-blue-400" : ""
+        onClick={props.onLinuxClick}
+        className={`mr-4 p-2 rounded-full transition-colors ${
+          theme === "dark" ? "hover:bg-gray-800" : "hover:bg-gray-100"
         }`}
-        style={{ width: 38, height: 38, fontSize: 28 }}
-        aria-label="Linux Menu"
       >
-        🐧
+        <img src="/arch-logo.svg" alt="Menu" className="w-6 h-6" />
       </button>
+
       {/* Terminal button */}
       <button
-        onClick={onOpenTerminal}
+        onClick={props.onOpenTerminal}
         className="flex items-center justify-center rounded hover:bg-blue-100 transition p-1 mr-2"
         style={{ width: 38, height: 38, fontSize: 22 }}
         aria-label="Open Terminal"
@@ -55,8 +48,8 @@ export default function Taskbar({
       >
         🖥️
       </button>
-      <div className="flex flex-row gap-2">
-        {openApps.map((name) => {
+      <div className="flex gap-2">
+        {props.openApps.map((name) => {
           const app = apps.find((a) => a.name === name);
           if (!app) return null;
           const isMinimized = minimized.includes(name);
@@ -92,9 +85,28 @@ export default function Taskbar({
         })}
       </div>
       <div className="flex-1" />
-      <div className="text-gray-700 font-mono text-xs sm:text-sm px-2 sm:px-3 select-none">
-        {time}
+
+      {/* Add settings button before the clock */}
+      <button
+        onClick={() => setShowSettings(!showSettings)}
+        className={`flex items-center justify-center rounded-full p-2 transition-colors mr-2
+          ${theme === "dark" ? "hover:bg-gray-800" : "hover:bg-gray-200"}`}
+        title="Quick Settings"
+      >
+        <FaCog
+          className={theme === "dark" ? "text-gray-300" : "text-gray-600"}
+        />
+      </button>
+
+      <div
+        className={`font-mono text-sm px-3 ${
+          theme === "dark" ? "text-gray-300" : "text-gray-600"
+        }`}
+      >
+        {props.time}
       </div>
+
+      <TaskbarSettings visible={showSettings} />
     </div>
   );
 }
