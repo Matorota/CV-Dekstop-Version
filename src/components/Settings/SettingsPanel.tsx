@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useTheme } from "../../context/ThemeContext";
+import { FaMemory, FaMicrochip, FaHdd, FaNetworkWired } from "react-icons/fa";
 
 type SettingsPanelProps = {
   onClose: () => void;
@@ -79,26 +80,111 @@ export default function SettingsPanel({ onClose }: SettingsPanelProps) {
         >
           {activeTab === "system" && (
             <div className="space-y-6">
-              <h3 className="text-lg font-semibold">System Information</h3>
-              <div className="space-y-2">
-                <p>
-                  <strong>OS:</strong> Arch Linux
-                </p>
-                <p>
-                  <strong>Kernel:</strong> 6.8.0-arch1-1
-                </p>
-                <p>
-                  <strong>DE:</strong> Custom React Desktop
-                </p>
-                <p>
-                  <strong>Shell:</strong> bash 5.2
-                </p>
-                <p>
-                  <strong>CPU:</strong> Intel i7 (simulated)
-                </p>
-                <p>
-                  <strong>Memory:</strong> 16GB (simulated)
-                </p>
+              {/* Operating System Info */}
+              <div
+                className={`p-4 rounded-lg ${
+                  theme === "dark" ? "bg-gray-800" : "bg-gray-50"
+                }`}
+              >
+                <h4 className="font-semibold mb-2">Operating System</h4>
+                <div className="space-y-1">
+                  <p>
+                    <strong>OS:</strong> Arch Linux x86_64
+                  </p>
+                  <p>
+                    <strong>Kernel:</strong> 6.8.0-arch1-1
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Hardware Components */}
+                <div
+                  className={`p-4 rounded-lg ${
+                    theme === "dark" ? "bg-gray-800" : "bg-gray-50"
+                  }`}
+                >
+                  <div className="flex items-center gap-3 mb-2">
+                    <FaMicrochip className="text-blue-500" size={20} />
+                    <h4 className="font-semibold">Processor</h4>
+                  </div>
+                  <div className="space-y-1 ml-8">
+                    <p>AMD Ryzen 9 9900X</p>
+                    <p className="text-sm opacity-75">12 Cores, 24 Threads</p>
+                    <p className="text-sm opacity-75">
+                      4.4GHz (Turbo up to 5.6GHz)
+                    </p>
+                    <p className="text-sm opacity-75">76MB Cache, 120W TDP</p>
+                  </div>
+                </div>
+
+                <div
+                  className={`p-4 rounded-lg ${
+                    theme === "dark" ? "bg-gray-800" : "bg-gray-50"
+                  }`}
+                >
+                  <div className="flex items-center gap-3 mb-2">
+                    <FaMemory className="text-green-500" size={20} />
+                    <h4 className="font-semibold">Memory</h4>
+                  </div>
+                  <div className="space-y-1 ml-8">
+                    <p>PATRIOT VIPER VENOM DDR5 32GB</p>
+                    <p className="text-sm opacity-75">2x16GB @ 6000MHz</p>
+                    <p className="text-sm opacity-75">XMP Profile Enabled</p>
+                  </div>
+                </div>
+
+                <div
+                  className={`p-4 rounded-lg ${
+                    theme === "dark" ? "bg-gray-800" : "bg-gray-50"
+                  }`}
+                >
+                  <div className="flex items-center gap-3 mb-2">
+                    <FaHdd className="text-purple-500" size={20} />
+                    <h4 className="font-semibold">Storage</h4>
+                  </div>
+                  <div className="space-y-1 ml-8">
+                    <p>ADATA LEGEND 800 2TB</p>
+                    <p className="text-sm opacity-75">PCIe Gen4 x4 NVMe</p>
+                    <p className="text-sm opacity-75">ext4 File System</p>
+                  </div>
+                </div>
+
+                <div
+                  className={`p-4 rounded-lg ${
+                    theme === "dark" ? "bg-gray-800" : "bg-gray-50"
+                  }`}
+                >
+                  <div className="flex items-center gap-3 mb-2">
+                    <FaNetworkWired className="text-red-500" size={20} />
+                    <h4 className="font-semibold">Graphics</h4>
+                  </div>
+                  <div className="space-y-1 ml-8">
+                    <p>ASUS Dual Radeon RX 7900 XT OC</p>
+                    <p className="text-sm opacity-75">20GB GDDR6</p>
+                    <p className="text-sm opacity-75">AMDGPU Driver</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Change title from "System Configuration" to "Additional Components" */}
+              <div
+                className={`p-4 rounded-lg ${
+                  theme === "dark" ? "bg-gray-800" : "bg-gray-50"
+                }`}
+              >
+                <h4 className="font-semibold mb-2">Additional Components</h4>
+                <div className="space-y-1">
+                  <p>
+                    <strong>Motherboard:</strong> GIGABYTE B650 EAGLE AM5
+                  </p>
+                  <p>
+                    <strong>Power Supply:</strong> BE QUIET 850W 80PLUS GOLD
+                  </p>
+                  <p>
+                    <strong>Cooling:</strong> MSI MAG CORELIQUID A13 360
+                  </p>
+                </div>
               </div>
             </div>
           )}
