@@ -60,7 +60,6 @@ export default function AppPanel({
             : "bg-white/95 border-blue-300"
         } rounded-xl shadow-2xl border-2 cursor-default h-full flex flex-col overflow-hidden`}
       >
-        {/* Fixed title bar */}
         <div
           className={`window-titlebar flex items-center justify-between px-2 sm:px-4 py-2 ${
             theme === "dark"
@@ -132,7 +131,6 @@ export default function AppPanel({
           </div>
         </div>
 
-        {/* Scrollable content area */}
         <div className="flex-1 overflow-auto">
           <div className="w-full h-full">{content}</div>
         </div>

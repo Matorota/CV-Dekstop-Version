@@ -80,7 +80,6 @@ export default function SettingsPanel({ onClose }: SettingsPanelProps) {
         >
           {activeTab === "system" && (
             <div className="space-y-6">
-              {/* Operating System Info */}
               <div
                 className={`p-4 rounded-lg ${
                   theme === "dark" ? "bg-gray-800" : "bg-gray-50"
@@ -98,7 +97,6 @@ export default function SettingsPanel({ onClose }: SettingsPanelProps) {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Hardware Components */}
                 <div
                   className={`p-4 rounded-lg ${
                     theme === "dark" ? "bg-gray-800" : "bg-gray-50"
@@ -167,7 +165,6 @@ export default function SettingsPanel({ onClose }: SettingsPanelProps) {
                 </div>
               </div>
 
-              {/* Change title from "System Configuration" to "Additional Components" */}
               <div
                 className={`p-4 rounded-lg ${
                   theme === "dark" ? "bg-gray-800" : "bg-gray-50"

@@ -10,16 +10,17 @@ type DesktopProps = {
   onAppClick: (name: string) => void;
   onCloseApp: (name: string) => void;
   linuxMenu: boolean;
-  onOpenTerminal: () => void; // Add this prop
-  onOpenSettings: () => void; // Add this prop
+  onOpenTerminal: () => void;
+  onOpenSettings: () => void;
 };
+
 export default function Desktop({
   openApps,
   onAppClick,
   onCloseApp,
   linuxMenu,
-  onOpenTerminal, // Add this prop
-  onOpenSettings, // Add this prop
+  onOpenTerminal,
+  onOpenSettings,
 }: DesktopProps) {
   const [minimized, setMinimized] = useState<string[]>([]);
 
@@ -31,7 +32,6 @@ export default function Desktop({
     setMinimized((prev) => prev.filter((n) => n !== name));
   };
 
-  // Better app organization
   const itemsPerColumn = 5;
   const firstColumnApps = apps.slice(0, itemsPerColumn);
   const secondColumnApps = apps.slice(itemsPerColumn);
@@ -40,7 +40,6 @@ export default function Desktop({
     <div className="flex-1 flex flex-row items-start justify-start relative select-none">
       <div className="w-full sm:w-auto overflow-y-auto max-h-[60vh] sm:max-h-none px-1">
         <div className="grid grid-cols-3 gap-2 mt-2 sm:grid-cols-2 sm:gap-8 sm:mt-16 sm:ml-10">
-          {/* First Column */}
           <div className="flex flex-col gap-4 sm:gap-6">
             {firstColumnApps.map((app: AppData) => (
               <AppIcon
@@ -52,7 +51,6 @@ export default function Desktop({
             ))}
           </div>
 
-          {/* Second Column */}
           {secondColumnApps.length > 0 && (
             <div className="flex flex-col gap-4 sm:gap-6">
               {secondColumnApps.map((app: AppData) => (
@@ -73,7 +71,6 @@ export default function Desktop({
         const app = apps.find((a: AppData) => a.name === name);
         if (!app) return null;
 
-        // Dynamic sizing based on app type
         const getAppSize = (appName: string) => {
           const isMobile = window.innerWidth < 640;
           switch (appName) {

@@ -66,7 +66,6 @@ export default function TaskbarSettings({ visible }: { visible: boolean }) {
         theme === "dark" ? "border-gray-700" : "border-gray-200"
       } w-80 backdrop-blur-md overflow-hidden`}
     >
-      {/* Header Tabs */}
       <div
         className={`flex border-b ${
           theme === "dark" ? "border-gray-700" : "border-gray-200"
@@ -89,7 +88,6 @@ export default function TaskbarSettings({ visible }: { visible: boolean }) {
             theme === "dark" ? "text-gray-200" : "text-gray-700"
           }`}
         >
-          {/* Theme Toggle */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               {theme === "dark" ? (
@@ -111,7 +109,6 @@ export default function TaskbarSettings({ visible }: { visible: boolean }) {
             </button>
           </div>
 
-          {/* Volume Control */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -132,7 +129,6 @@ export default function TaskbarSettings({ visible }: { visible: boolean }) {
             />
           </div>
 
-          {/* Brightness Control */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">

@@ -13,9 +13,7 @@ import SettingsPanel from "./components/Settings/SettingsPanel";
 import bg1 from "./assets/background1.jpg";
 import bg2 from "./assets/background2.jpg";
 import bg3 from "./assets/background3.jpg";
-import TestingBackend from "./components/backendEnpoints/TestingBackend";
 
-<TestingBackend />;
 const backgrounds = [bg1, bg2, bg3];
 
 function MainDesktop() {
@@ -107,12 +105,8 @@ function MainDesktop() {
           }}
         >
           <span className="font-semibold tracking-wide select-none">
-            <img
-              src="/arch-logo.svg"
-              alt="Arch Linux"
-              className="w-6 h-6 inline-block mr-2"
-            />
-            Arch Linux Desktop
+            <span className="text-2xl mr-2">🐧</span>
+            Linux Desktop
           </span>
           <SystemTray />
         </div>

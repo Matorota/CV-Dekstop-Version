@@ -35,10 +35,9 @@ export default function Taskbar({ ...props }: TaskbarProps) {
           theme === "dark" ? "hover:bg-gray-800" : "hover:bg-gray-100"
         }`}
       >
-        <img src="/arch-logo.svg" alt="Menu" className="w-6 h-6" />
+        <span className="text-2xl">🐧</span>
       </button>
 
-      {/* Terminal button */}
       <button
         onClick={props.onOpenTerminal}
         className="flex items-center justify-center rounded hover:bg-blue-100 transition p-1 mr-2"
@@ -86,7 +85,6 @@ export default function Taskbar({ ...props }: TaskbarProps) {
       </div>
       <div className="flex-1" />
 
-      {/* Add settings button before the clock */}
       <button
         onClick={() => setShowSettings(!showSettings)}
         className={`flex items-center justify-center rounded-full p-2 transition-colors mr-2
