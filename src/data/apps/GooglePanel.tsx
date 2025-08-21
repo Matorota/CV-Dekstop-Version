@@ -19,17 +19,17 @@ export default function GooglePanel() {
 
   return (
     <div
-      className={`w-full h-full flex flex-col ${
+      className={`w-full h-full flex flex-col overflow-hidden ${
         theme === "dark"
           ? "bg-gray-900 text-gray-200"
           : "bg-white text-gray-800"
       }`}
     >
-      {/* Navigation Bar */}
+      {/* Navigation Bar - responsive */}
       <div
-        className={`flex items-center gap-2 p-2 border-b ${
+        className={`flex items-center gap-1 sm:gap-2 p-1 sm:p-2 border-b ${
           theme === "dark" ? "border-gray-700" : "border-gray-200"
-        }`}
+        } flex-shrink-0`}
       >
         <button
           onClick={() => {
@@ -38,12 +38,12 @@ export default function GooglePanel() {
               setUrl(history[currentIndex - 1]);
             }
           }}
-          className={`p-2 rounded ${
+          className={`p-1 sm:p-2 rounded text-xs sm:text-sm ${
             currentIndex === 0 ? "opacity-50" : "hover:bg-gray-100"
           }`}
           disabled={currentIndex === 0}
         >
-          <FaArrowLeft size={14} />
+          <FaArrowLeft size={12} />
         </button>
 
         <button
@@ -53,31 +53,29 @@ export default function GooglePanel() {
               setUrl(history[currentIndex + 1]);
             }
           }}
-          className={`p-2 rounded ${
+          className={`p-1 sm:p-2 rounded text-xs sm:text-sm ${
             currentIndex === history.length - 1
               ? "opacity-50"
               : "hover:bg-gray-100"
           }`}
           disabled={currentIndex === history.length - 1}
         >
-          <FaArrowRight size={14} />
+          <FaArrowRight size={12} />
         </button>
 
         <button
-          onClick={() => {
-            setUrl(history[currentIndex]);
-          }}
-          className="p-2 rounded hover:bg-gray-100"
+          onClick={() => setUrl(history[currentIndex])}
+          className="p-1 sm:p-2 rounded hover:bg-gray-100"
         >
-          <FaRedo size={14} />
+          <FaRedo size={12} />
         </button>
 
         <div
-          className={`flex-1 flex items-center gap-2 px-3 py-1 rounded-lg ${
+          className={`flex-1 flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 rounded-lg ${
             theme === "dark" ? "bg-gray-800" : "bg-gray-100"
           }`}
         >
-          <FaSearch className="text-gray-400" size={14} />
+          <FaSearch className="text-gray-400" size={12} />
           <input
             type="text"
             value={url}
@@ -87,15 +85,15 @@ export default function GooglePanel() {
                 handleNavigate(url);
               }
             }}
-            className={`flex-1 bg-transparent outline-none text-sm ${
+            className={`flex-1 bg-transparent outline-none text-xs sm:text-sm ${
               theme === "dark" ? "text-gray-200" : "text-gray-800"
             }`}
           />
         </div>
       </div>
 
-      {/* Web Content */}
-      <div className="flex-1">
+      {/* Web Content - scrollable */}
+      <div className="flex-1 overflow-hidden">
         <iframe
           src={url}
           className="w-full h-full border-none"

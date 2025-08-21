@@ -32,13 +32,17 @@ export default function AppPanel({
       default={{
         x: isMobile ? 0 : 300 + idx * 40,
         y: isMobile ? 0 : 100 + idx * 40,
-        width: defaultWidth ?? (isMobile ? "98vw" : 320),
-        height: defaultHeight ?? (isMobile ? "60vh" : "auto"),
+        width: defaultWidth ?? (isMobile ? "95vw" : 640),
+        height: defaultHeight ?? (isMobile ? "70vh" : 480),
       }}
       position={maximized ? { x: 0, y: 0 } : undefined}
-      size={maximized ? { width: "100vw", height: "100vh" } : undefined}
-      minWidth={isMobile ? "98vw" : 260}
-      minHeight={isMobile ? "60vh" : undefined}
+      size={
+        maximized ? { width: "100vw", height: "calc(100vh - 48px)" } : undefined
+      }
+      minWidth={isMobile ? "95vw" : 320}
+      minHeight={isMobile ? "50vh" : 240}
+      maxWidth="95vw"
+      maxHeight="calc(100vh - 60px)"
       bounds="parent"
       dragHandleClassName="window-titlebar"
       style={{
@@ -52,16 +56,17 @@ export default function AppPanel({
       <div
         className={`${
           theme === "dark"
-            ? "bg-gray-800/90 border-gray-600"
-            : "bg-white/90 border-blue-300"
-        } rounded-xl shadow-2xl border-2 cursor-default h-full`}
+            ? "bg-gray-800/95 border-gray-600"
+            : "bg-white/95 border-blue-300"
+        } rounded-xl shadow-2xl border-2 cursor-default h-full flex flex-col overflow-hidden`}
       >
+        {/* Fixed title bar */}
         <div
           className={`window-titlebar flex items-center justify-between px-2 sm:px-4 py-2 ${
             theme === "dark"
               ? "bg-gray-700 text-white border-gray-600"
               : "bg-blue-100 text-blue-900 border-blue-300"
-          } rounded-t-xl border-b cursor-move select-none text-sm sm:text-lg`}
+          } rounded-t-xl border-b cursor-move select-none text-sm sm:text-lg flex-shrink-0`}
         >
           <span className="font-bold text-blue-900 truncate">{name}</span>
           <div className="flex items-center gap-2">
@@ -126,8 +131,10 @@ export default function AppPanel({
             </button>
           </div>
         </div>
-        <div className="p-1 sm:p-4 text-gray-700 overflow-auto h-[calc(100%-48px)] text-xs sm:text-base">
-          {content}
+
+        {/* Scrollable content area */}
+        <div className="flex-1 overflow-auto">
+          <div className="w-full h-full">{content}</div>
         </div>
       </div>
     </Rnd>
