@@ -1,3 +1,4 @@
+# For now  closed ( problems with running build 
 # React + TypeScript + Vite + Tailwind
 
 ### For now only works for desktop planning to add phone version too
