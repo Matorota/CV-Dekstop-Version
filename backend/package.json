@@ -2,12 +2,12 @@
   "name": "cv-backend",
   "version": "1.0.0",
   "description": "CV Backend API for Vercel",
-  "main": "api/index.js",
+  "main": "api/index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "node local-server.js",
     "dev:vercel": "vercel dev",
-    "build": "echo 'No build needed for JavaScript'",
+    "build": "echo 'No build required for serverless functions'",
     "start": "node local-server.js",
     "deploy": "vercel --prod"
   },
@@ -34,5 +34,9 @@
     "@vercel/node": "^3.0.12",
     "typescript": "^5.3.3",
     "vercel": "^32.7.2"
+  },
+  "engines": {
+    "node": "20.x",
+    "npm": ">=8.0.0"
   }
 }

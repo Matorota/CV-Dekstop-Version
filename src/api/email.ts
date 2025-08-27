@@ -1,5 +1,5 @@
-// Replace with your actual Vercel backend URL from previous deployment
-const API_BASE = "https://backend-dg3tkveig-matorotas-projects.vercel.app";
+// Replace with your actual Vercel backend URL from deployment output
+const API_BASE = "https://backend-4tiqzvp9v-matorotas-projects.vercel.app";
 
 export interface EmailData {
   name: string;
