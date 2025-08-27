@@ -39,33 +39,34 @@ const createTransporter = () => {
 const transporter = createTransporter();
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  // Add this debug logging
-  console.log('Environment check:', {
-    EMAIL_USER: process.env.EMAIL_USER ? 'SET' : 'NOT SET',
-    EMAIL_PASS: process.env.EMAIL_PASS ? 'SET (length: ' + process.env.EMAIL_PASS.length + ')' : 'NOT SET',
-    NODE_ENV: process.env.NODE_ENV,
-    VERCEL: process.env.VERCEL,
-    allEnvKeys: Object.keys(process.env).filter(key => key.includes('EMAIL'))
-  });
+  // Set comprehensive CORS headers immediately
+  const allowedOrigins = [
+    'https://cv-dekstop-version.vercel.app',
+    'http://localhost:5173',
+    'http://localhost:3000',
+    'http://localhost:4173'
+  ];
 
-  // Set CORS headers BEFORE any other logic
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept');
+  const origin = req.headers.origin as string;
+  
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  } else {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+  }
+
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Accept, Authorization, X-Requested-With, Origin');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Max-Age', '86400');
 
-  // Log incoming request
-  log('Incoming request:', {
-    method: req.method,
-    url: req.url,
-    origin: req.headers.origin,
-    userAgent: req.headers['user-agent'],
-    headers: req.headers
-  });
+  // Log incoming request for debugging
+  console.log(`${req.method} ${req.url} from origin: ${origin}`);
+  console.log('Request headers:', req.headers);
 
-  // Handle preflight OPTIONS request
+  // Handle preflight OPTIONS request immediately
   if (req.method === 'OPTIONS') {
-    log('Handling OPTIONS preflight request');
+    console.log('Handling OPTIONS preflight request');
     res.status(200).end();
     return;
   }
