@@ -39,15 +39,37 @@ transporter.verify((error, success) => {
   }
 });
 
+// Enhanced CORS configuration
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://localhost:3000"],
+    origin: [
+      "http://localhost:5173",
+      "http://localhost:3000",
+      "http://localhost:4173",
+      "https://cv-dekstop-version.vercel.app", // Add your production domain
+    ],
     methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: [
+      "Content-Type",
+      "Authorization",
+      "X-Requested-With",
+      "Accept",
+    ],
     credentials: true,
   })
 );
 
 app.use(express.json());
+
+// Add request logging
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} [${req.method}] ${req.url}`);
+  console.log("Request headers:", req.headers);
+  if (req.body && Object.keys(req.body).length > 0) {
+    console.log("Request body:", req.body);
+  }
+  next();
+});
 
 app.get("/api/check", (req, res) => {
   res.status(200).json({ ok: true, message: "Email service is ready" });
@@ -59,11 +81,14 @@ app.post("/api/send-email", async (req, res) => {
     const { name, email, message } = req.body;
 
     if (!name?.trim() || !email?.trim() || !message?.trim()) {
-      return res.status(400).json({ error: "Missing required fields" });
+      return res.status(400).json({
+        success: false,
+        error: "Missing required fields",
+      });
     }
 
     const mailOptions = {
-      from: process.env.EMAIL_USER,
+      from: `"CV Contact Form" <${process.env.EMAIL_USER}>`,
       to: "matasmatasp@gmail.com",
       replyTo: email,
       subject: `CV Contact from ${name}`,
@@ -83,10 +108,15 @@ app.post("/api/send-email", async (req, res) => {
     const info = await transporter.sendMail(mailOptions);
     console.log("Email sent successfully:", info.messageId);
 
-    return res.status(200).json({ success: true, messageId: info.messageId });
+    return res.status(200).json({
+      success: true,
+      messageId: info.messageId,
+      message: "Email sent successfully!",
+    });
   } catch (error) {
     console.error("Failed to send email:", error);
     return res.status(500).json({
+      success: false,
       error: "Failed to send email",
       details: error instanceof Error ? error.message : String(error),
     });
