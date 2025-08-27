@@ -1,53 +1,50 @@
-export interface EmailForm {
+// Replace with your actual Vercel backend URL from previous deployment
+const API_BASE = "https://backend-dg3tkveig-matorotas-projects.vercel.app";
+
+export interface EmailData {
   name: string;
   email: string;
   message: string;
 }
 
-const API_BASE = import.meta.env.PROD
-  ? "https://your-deployed-backend.vercel.app"
-  : "http://localhost:3000";
+export interface EmailResponse {
+  success: boolean;
+  messageId?: string;
+  error?: string;
+}
 
-export async function sendEmail(form: EmailForm) {
+export const sendEmail = async (data: EmailData): Promise<EmailResponse> => {
   try {
-    console.log("Sending email:", form);
-    const res = await fetch(`${API_BASE}/api/send-email`, {
+    const response = await fetch(`${API_BASE}/api/send-email`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Accept: "application/json",
       },
-      body: JSON.stringify(form),
+      body: JSON.stringify(data),
     });
 
-    console.log("Response status:", res.status);
-    const data = await res.json();
-    console.log("Response data:", data);
-
-    if (!res.ok) {
-      throw new Error(data.error || "Failed to send email");
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    return data;
+    const result = await response.json();
+    return result;
   } catch (error) {
-    console.error("Email API Error:", error);
-    throw error;
+    console.error("Failed to send email:", error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Unknown error",
+    };
   }
-}
+};
 
-export async function checkEmailService() {
+export const checkEmailService = async (): Promise<boolean> => {
   try {
-    const res = await fetch(`${API_BASE}/api/check`);
-    console.log("Check service status:", res.status);
-    const data = await res.json();
-
-    if (!res.ok) {
-      throw new Error(data.error || "Email service check failed");
-    }
-
-    return data;
+    const response = await fetch(`${API_BASE}/api/check`);
+    const result = await response.json();
+    return result.ok;
   } catch (error) {
-    console.error("Check API Error:", error);
-    throw error;
+    console.error("Email service check failed:", error);
+    return false;
   }
-}
+};

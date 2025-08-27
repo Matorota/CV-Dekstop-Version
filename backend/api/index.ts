@@ -16,6 +16,7 @@ const transporter = nodemailer.createTransport({
 });
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  // Set CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -24,14 +25,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(200).end();
   }
 
-  const { url } = req;
+  try {
+    if (req.url === '/api/check' && req.method === 'GET') {
+      return res.status(200).json({ ok: true, message: "Email service is ready" });
+    }
 
-  if (url === '/api/check' && req.method === 'GET') {
-    return res.json({ ok: true, message: "Email service is ready" });
-  }
-
-  if (url === '/api/send-email' && req.method === 'POST') {
-    try {
+    if (req.url === '/api/send-email' && req.method === 'POST') {
       console.log("Received email request:", req.body);
       const { name, email, message } = req.body;
 
@@ -60,15 +59,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       const info = await transporter.sendMail(mailOptions);
       console.log("Email sent:", info.messageId);
 
-      return res.json({ success: true, messageId: info.messageId });
-    } catch (error) {
-      console.error("Failed to send email:", error);
-      return res.status(500).json({
-        error: "Failed to send email",
-        details: error instanceof Error ? error.message : String(error),
-      });
+      return res.status(200).json({ success: true, messageId: info.messageId });
     }
-  }
 
-  return res.status(404).json({ error: "Not found" });
+    return res.status(404).json({ error: "Not found" });
+  } catch (error) {
+    console.error("API Error:", error);
+    return res.status(500).json({
+      error: "Internal server error",
+      details: error instanceof Error ? error.message : String(error),
+    });
+  }
 }

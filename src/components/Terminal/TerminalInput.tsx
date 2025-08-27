@@ -22,18 +22,18 @@ export default function TerminalInput({
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex px-3 py-2 bg-black border-t border-gray-700"
+      className="flex items-center gap-2 px-3 py-2 border-t border-gray-700"
     >
-      <span className="text-blue-400 font-mono mr-2">{cwd}</span>
-      <span className="text-green-400 font-mono">$</span>
+      <span className="text-blue-400 font-mono text-sm">{cwd}</span>
+      <span className="text-green-400 font-mono text-sm">$</span>
       <input
-        className="flex-1 bg-black text-green-300 font-mono outline-none px-2"
-        autoFocus
+        type="text"
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        spellCheck={false}
-        autoComplete="off"
         disabled={disabled}
+        className="flex-1 bg-transparent text-green-300 outline-none font-mono text-sm"
+        placeholder="Enter command..."
+        autoFocus
       />
     </form>
   );
