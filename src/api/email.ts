@@ -1,7 +1,4 @@
-// Use proxy in development, direct URL in production
-const API_BASE = import.meta.env.DEV
-  ? ""
-  : "https://backend-4tiqzvp9v-matorotas-projects.vercel.app";
+const API_BASE = "https://backend-4tiqzvp9v-matorotas-projects.vercel.app";
 
 export interface EmailData {
   name: string;

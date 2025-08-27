@@ -39,6 +39,21 @@ const createTransporter = () => {
 const transporter = createTransporter();
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  // Add this debug logging
+  console.log('Environment check:', {
+    EMAIL_USER: process.env.EMAIL_USER ? 'SET' : 'NOT SET',
+    EMAIL_PASS: process.env.EMAIL_PASS ? 'SET (length: ' + process.env.EMAIL_PASS.length + ')' : 'NOT SET',
+    NODE_ENV: process.env.NODE_ENV,
+    VERCEL: process.env.VERCEL,
+    allEnvKeys: Object.keys(process.env).filter(key => key.includes('EMAIL'))
+  });
+
+  // Set CORS headers BEFORE any other logic
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept');
+  res.setHeader('Access-Control-Max-Age', '86400');
+
   // Log incoming request
   log('Incoming request:', {
     method: req.method,
@@ -47,32 +62,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     userAgent: req.headers['user-agent'],
     headers: req.headers
   });
-
-  // Enhanced CORS configuration - Allow your specific domains
-  const allowedOrigins = [
-    'https://cv-dekstop-version.vercel.app',
-    'http://localhost:5173',
-    'http://localhost:3000',
-    'http://localhost:4173'
-  ];
-
-  const origin = req.headers.origin;
-  log('Request origin:', origin);
-  log('Allowed origins:', allowedOrigins);
-
-  // Set CORS headers
-  if (origin && allowedOrigins.includes(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-    log('CORS: Origin allowed', origin);
-  } else {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    log('CORS: Using wildcard origin');
-  }
-
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept');
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-  res.setHeader('Access-Control-Max-Age', '86400');
 
   // Handle preflight OPTIONS request
   if (req.method === 'OPTIONS') {
