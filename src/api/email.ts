@@ -4,10 +4,14 @@ export interface EmailForm {
   message: string;
 }
 
+const API_BASE = import.meta.env.PROD
+  ? "https://your-deployed-backend.vercel.app"
+  : "http://localhost:3000";
+
 export async function sendEmail(form: EmailForm) {
   try {
     console.log("Sending email:", form);
-    const res = await fetch("/api/send-email", {
+    const res = await fetch(`${API_BASE}/api/send-email`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -33,7 +37,7 @@ export async function sendEmail(form: EmailForm) {
 
 export async function checkEmailService() {
   try {
-    const res = await fetch("/api/check");
+    const res = await fetch(`${API_BASE}/api/check`);
     console.log("Check service status:", res.status);
     const data = await res.json();
 

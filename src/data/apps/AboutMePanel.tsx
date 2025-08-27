@@ -177,17 +177,11 @@ export default function AboutMePanel() {
                   : "hover:scale-105"
               }`}
             >
-              <div
-                className={`w-full h-full ${
-                  theme === "dark" ? "bg-gray-700" : "bg-gray-200"
-                } flex items-center justify-center`}
-              >
-                <FaCamera
-                  className={`text-2xl sm:text-4xl ${
-                    theme === "dark" ? "text-gray-500" : "text-gray-400"
-                  }`}
-                />
-              </div>
+              <img
+                src={image.src}
+                alt={image.alt}
+                className="w-full h-full object-cover"
+              />
             </button>
           ))}
         </div>
