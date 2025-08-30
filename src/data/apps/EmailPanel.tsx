@@ -1,11 +1,13 @@
-import { useState } from "react";
-import { sendEmail } from "../../api/email";
+import { useState, useEffect } from "react";
+import { sendEmail, checkEmailService } from "../../api/email";
 import { useTheme } from "../../context/ThemeContext";
 import {
   FaEnvelope,
   FaLinkedin,
   FaExternalLinkAlt,
   FaExclamationTriangle,
+  FaCheckCircle,
+  FaSpinner,
 } from "react-icons/fa";
 
 export default function EmailPanel() {
@@ -19,10 +21,44 @@ export default function EmailPanel() {
     type: "idle" | "loading" | "success" | "error";
     message: string;
   }>({ type: "idle", message: "" });
+  const [serviceHealth, setServiceHealth] = useState<boolean | null>(null);
+
+  // Check service health on component mount
+  useEffect(() => {
+    const checkHealth = async () => {
+      const isHealthy = await checkEmailService();
+      setServiceHealth(isHealthy);
+    };
+    checkHealth();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setStatus({ type: "loading", message: "Sending email..." });
+
+    // Validate form
+    if (
+      !formData.name.trim() ||
+      !formData.email.trim() ||
+      !formData.message.trim()
+    ) {
+      setStatus({
+        type: "error",
+        message: "Please fill in all fields before sending.",
+      });
+      return;
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setStatus({
+        type: "error",
+        message: "Please enter a valid email address.",
+      });
+      return;
+    }
+
+    setStatus({ type: "loading", message: "Sending your message..." });
 
     try {
       const result = await sendEmail(formData);
@@ -30,7 +66,8 @@ export default function EmailPanel() {
       if (result.success) {
         setStatus({
           type: "success",
-          message: "Email sent successfully! Thank you for reaching out.",
+          message:
+            "Email sent successfully! Thank you for reaching out. I'll get back to you soon.",
         });
         setFormData({ name: "", email: "", message: "" });
       } else {
@@ -69,13 +106,44 @@ export default function EmailPanel() {
         Contact Me
       </h2>
 
+      {/* Service Health Indicator */}
+      <div
+        className={`mb-4 p-3 rounded-lg flex items-center gap-2 ${
+          serviceHealth === true
+            ? theme === "dark"
+              ? "bg-green-900/20 border-green-600"
+              : "bg-green-50 border-green-300"
+            : serviceHealth === false
+            ? theme === "dark"
+              ? "bg-red-900/20 border-red-600"
+              : "bg-red-50 border-red-300"
+            : theme === "dark"
+            ? "bg-gray-800/60 border-gray-600"
+            : "bg-gray-50 border-gray-300"
+        } border`}
+      >
+        {serviceHealth === true && <FaCheckCircle className="text-green-500" />}
+        {serviceHealth === false && (
+          <FaExclamationTriangle className="text-red-500" />
+        )}
+        {serviceHealth === null && (
+          <FaSpinner className="text-gray-500 animate-spin" />
+        )}
+        <span className="text-sm">
+          {serviceHealth === true && "Email service is ready"}
+          {serviceHealth === false &&
+            "Email service unavailable - please use alternative contact methods"}
+          {serviceHealth === null && "Checking email service..."}
+        </span>
+      </div>
+
       <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4 mb-6">
         <div>
           <label
             htmlFor="name"
             className="block text-sm font-medium mb-1 sm:mb-2"
           >
-            Name
+            Name *
           </label>
           <input
             type="text"
@@ -98,7 +166,7 @@ export default function EmailPanel() {
             htmlFor="email"
             className="block text-sm font-medium mb-1 sm:mb-2"
           >
-            Email
+            Email *
           </label>
           <input
             type="email"
@@ -121,7 +189,7 @@ export default function EmailPanel() {
             htmlFor="message"
             className="block text-sm font-medium mb-1 sm:mb-2"
           >
-            Message
+            Message *
           </label>
           <textarea
             id="message"
@@ -141,9 +209,14 @@ export default function EmailPanel() {
 
         <button
           type="submit"
-          disabled={status.type === "loading"}
-          className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium py-2 px-4 rounded-lg transition-colors text-sm sm:text-base"
+          disabled={status.type === "loading" || serviceHealth === false}
+          className={`w-full font-medium py-2 px-4 rounded-lg transition-colors text-sm sm:text-base flex items-center justify-center gap-2 ${
+            status.type === "loading" || serviceHealth === false
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-blue-600 hover:bg-blue-700 text-white"
+          }`}
         >
+          {status.type === "loading" && <FaSpinner className="animate-spin" />}
           {status.type === "loading" ? "Sending..." : "Send Message"}
         </button>
       </form>
@@ -160,6 +233,12 @@ export default function EmailPanel() {
           }`}
         >
           <div className="flex items-start gap-2">
+            {status.type === "success" && (
+              <FaCheckCircle
+                className="text-green-600 mt-1 flex-shrink-0"
+                size={16}
+              />
+            )}
             {status.type === "error" && (
               <FaExclamationTriangle
                 className="text-red-600 mt-1 flex-shrink-0"
@@ -171,7 +250,7 @@ export default function EmailPanel() {
         </div>
       )}
 
-      {/* Alternative Contact Methods - Show always or prominently when error */}
+      {/* Alternative Contact Methods */}
       <div
         className={`p-4 sm:p-6 rounded-xl border ${
           status.type === "error"
@@ -241,7 +320,7 @@ export default function EmailPanel() {
 
           {/* LinkedIn Link */}
           <a
-            href="https://linkedin.com/in/matas-strimaitis"
+            href="https://www.linkedin.com/in/matas-štrimaitis-9aa953186/?originalSubdomain=lt"
             target="_blank"
             rel="noopener noreferrer"
             className={`flex items-center gap-3 p-3 rounded-lg transition-all duration-200 ${
@@ -290,7 +369,7 @@ export default function EmailPanel() {
         )}
       </div>
 
-      {/* Footer Contact Info - Always visible */}
+      {/* Footer Contact Info */}
       <div
         className={`mt-6 pt-4 border-t text-center ${
           theme === "dark" ? "border-gray-700" : "border-gray-200"
@@ -302,15 +381,10 @@ export default function EmailPanel() {
           }`}
         >
           Quick Contact:
-          <a
-            href="mailto:matasmatasp@gmail.com"
-            className="text-blue-500 hover:text-blue-600 mx-2 underline"
-          >
-            matasmatasp@gmail.com
-          </a>
+          <span className="text-blue-500 mx-2 font-medium">+370 602 64827</span>
           |
           <a
-            href="https://linkedin.com/in/matas-strimaitis"
+            href="https://www.linkedin.com/in/matas-štrimaitis-9aa953186/?originalSubdomain=lt"
             target="_blank"
             rel="noopener noreferrer"
             className="text-blue-500 hover:text-blue-600 mx-2 underline"
