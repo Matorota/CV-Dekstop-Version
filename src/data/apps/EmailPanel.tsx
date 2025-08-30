@@ -1,200 +1,323 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { sendEmail } from "../../api/email";
 import { useTheme } from "../../context/ThemeContext";
+import {
+  FaEnvelope,
+  FaLinkedin,
+  FaExternalLinkAlt,
+  FaExclamationTriangle,
+} from "react-icons/fa";
 
 export default function EmailPanel() {
   const { theme } = useTheme();
-  const [form, setForm] = useState({
+  const [formData, setFormData] = useState({
     name: "",
     email: "",
     message: "",
   });
+  const [status, setStatus] = useState<{
+    type: "idle" | "loading" | "success" | "error";
+    message: string;
+  }>({ type: "idle", message: "" });
 
-  const [sent, setSent] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [backendStatus] = useState<string | null>(null);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus({ type: "loading", message: "Sending email..." });
 
-  useEffect(() => {}, []);
+    try {
+      const result = await sendEmail(formData);
+
+      if (result.success) {
+        setStatus({
+          type: "success",
+          message: "Email sent successfully! Thank you for reaching out.",
+        });
+        setFormData({ name: "", email: "", message: "" });
+      } else {
+        setStatus({
+          type: "error",
+          message:
+            result.error ||
+            "Failed to send email. Please try the alternative contact methods below.",
+        });
+      }
+    } catch (error) {
+      setStatus({
+        type: "error",
+        message:
+          "Something went wrong! Please try the alternative contact methods below.",
+      });
+    }
+  };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleSend = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
-    try {
-      await sendEmail(form);
-      setSent(true);
-      setForm({ name: "", email: "", message: "" });
-      setTimeout(() => setSent(false), 3000);
-    } catch (err: any) {
-      setError(
-        err?.message?.includes("Failed to fetch")
-          ? "Could not connect to backend. Please try again later."
-          : "Failed to send message. Please try again."
-      );
-      console.error("Send email error:", err);
-    } finally {
-      setLoading(false);
-    }
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
   };
 
   return (
     <div
-      className={`w-full h-full overflow-y-auto flex flex-col items-center justify-start p-3 sm:p-6 ${
+      className={`p-3 sm:p-6 w-full h-full overflow-y-auto ${
         theme === "dark" ? "text-gray-200" : "text-gray-800"
       }`}
     >
-      <div className="w-full max-w-md mx-auto flex flex-col items-center">
-        <h2 className="text-lg sm:text-2xl font-bold mb-4 sm:mb-6 border-b-2 border-blue-500 pb-2 text-center w-full">
-          Contact Me
-        </h2>
+      <h2 className="text-lg sm:text-2xl font-bold mb-4 sm:mb-6 border-b-2 border-blue-500 pb-2">
+        Contact Me
+      </h2>
 
-        {backendStatus && (
-          <div className="text-red-600 text-xs sm:text-sm mb-4 text-center w-full p-2 bg-red-50 rounded-lg border border-red-200">
-            Backend/API error: {backendStatus}
+      <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4 mb-6">
+        <div>
+          <label
+            htmlFor="name"
+            className="block text-sm font-medium mb-1 sm:mb-2"
+          >
+            Name
+          </label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+            className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base ${
+              theme === "dark"
+                ? "bg-gray-800 border-gray-600 text-gray-200"
+                : "bg-white border-gray-300 text-gray-800"
+            }`}
+            placeholder="Your full name"
+          />
+        </div>
+
+        <div>
+          <label
+            htmlFor="email"
+            className="block text-sm font-medium mb-1 sm:mb-2"
+          >
+            Email
+          </label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+            className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base ${
+              theme === "dark"
+                ? "bg-gray-800 border-gray-600 text-gray-200"
+                : "bg-white border-gray-300 text-gray-800"
+            }`}
+            placeholder="your.email@example.com"
+          />
+        </div>
+
+        <div>
+          <label
+            htmlFor="message"
+            className="block text-sm font-medium mb-1 sm:mb-2"
+          >
+            Message
+          </label>
+          <textarea
+            id="message"
+            name="message"
+            value={formData.message}
+            onChange={handleChange}
+            required
+            rows={4}
+            className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none text-sm sm:text-base ${
+              theme === "dark"
+                ? "bg-gray-800 border-gray-600 text-gray-200"
+                : "bg-white border-gray-300 text-gray-800"
+            }`}
+            placeholder="Your message here..."
+          />
+        </div>
+
+        <button
+          type="submit"
+          disabled={status.type === "loading"}
+          className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium py-2 px-4 rounded-lg transition-colors text-sm sm:text-base"
+        >
+          {status.type === "loading" ? "Sending..." : "Send Message"}
+        </button>
+      </form>
+
+      {/* Status Messages */}
+      {status.message && (
+        <div
+          className={`p-3 sm:p-4 rounded-lg mb-6 ${
+            status.type === "success"
+              ? "bg-green-100 text-green-800 border border-green-200"
+              : status.type === "error"
+              ? "bg-red-100 text-red-800 border border-red-200"
+              : "bg-blue-100 text-blue-800 border border-blue-200"
+          }`}
+        >
+          <div className="flex items-start gap-2">
+            {status.type === "error" && (
+              <FaExclamationTriangle
+                className="text-red-600 mt-1 flex-shrink-0"
+                size={16}
+              />
+            )}
+            <p className="text-sm">{status.message}</p>
+          </div>
+        </div>
+      )}
+
+      {/* Alternative Contact Methods - Show always or prominently when error */}
+      <div
+        className={`p-4 sm:p-6 rounded-xl border ${
+          status.type === "error"
+            ? theme === "dark"
+              ? "bg-yellow-900/20 border-yellow-600"
+              : "bg-yellow-50 border-yellow-300"
+            : theme === "dark"
+            ? "bg-gray-800/60 border-gray-700"
+            : "bg-gray-50 border-gray-200"
+        }`}
+      >
+        {status.type === "error" && (
+          <div className="mb-4">
+            <h3
+              className={`font-semibold text-base sm:text-lg mb-2 ${
+                theme === "dark" ? "text-yellow-300" : "text-yellow-800"
+              }`}
+            >
+              Having trouble? Contact me directly:
+            </h3>
           </div>
         )}
 
-        <form
-          onSubmit={handleSend}
-          className="flex flex-col gap-3 sm:gap-4 w-full"
+        <h3
+          className={`font-semibold text-sm sm:text-base mb-3 ${
+            status.type === "error"
+              ? theme === "dark"
+                ? "text-yellow-300"
+                : "text-yellow-800"
+              : theme === "dark"
+              ? "text-gray-300"
+              : "text-gray-700"
+          }`}
         >
-          <div className="space-y-3 sm:space-y-4">
-            <label
-              className={`block text-xs sm:text-sm font-semibold ${
-                theme === "dark" ? "text-gray-300" : "text-gray-700"
-              }`}
-            >
-              Your Name
-              <input
-                type="text"
-                name="name"
-                required
-                value={form.name}
-                onChange={handleChange}
-                className={`mt-1 w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg border-2 transition-all duration-200 ${
-                  theme === "dark"
-                    ? "bg-gray-700 border-gray-600 text-gray-200 focus:border-blue-500 focus:bg-gray-600"
-                    : "bg-white border-gray-300 text-gray-800 focus:border-blue-400 focus:bg-blue-50"
-                } focus:outline-none text-sm sm:text-base shadow-sm hover:shadow-md`}
-                placeholder="Enter your full name"
-                disabled={loading}
-              />
-            </label>
+          Alternative Contact Methods
+        </h3>
 
-            <label
-              className={`block text-xs sm:text-sm font-semibold ${
-                theme === "dark" ? "text-gray-300" : "text-gray-700"
-              }`}
-            >
-              Your Email
-              <input
-                type="email"
-                name="email"
-                required
-                value={form.email}
-                onChange={handleChange}
-                className={`mt-1 w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg border-2 transition-all duration-200 ${
-                  theme === "dark"
-                    ? "bg-gray-700 border-gray-600 text-gray-200 focus:border-blue-500 focus:bg-gray-600"
-                    : "bg-white border-gray-300 text-gray-800 focus:border-blue-400 focus:bg-blue-50"
-                } focus:outline-none text-sm sm:text-base shadow-sm hover:shadow-md`}
-                placeholder="your.email@example.com"
-                disabled={loading}
-              />
-            </label>
-
-            <label
-              className={`block text-xs sm:text-sm font-semibold ${
-                theme === "dark" ? "text-gray-300" : "text-gray-700"
-              }`}
-            >
-              Message
-              <textarea
-                name="message"
-                required
-                value={form.message}
-                onChange={handleChange}
-                className={`mt-1 w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg border-2 transition-all duration-200 resize-vertical min-h-[100px] ${
-                  theme === "dark"
-                    ? "bg-gray-700 border-gray-600 text-gray-200 focus:border-blue-500 focus:bg-gray-600"
-                    : "bg-white border-gray-300 text-gray-800 focus:border-blue-400 focus:bg-blue-50"
-                } focus:outline-none text-sm sm:text-base shadow-sm hover:shadow-md`}
-                rows={4}
-                placeholder="Write your message here..."
-                disabled={loading}
-              />
-            </label>
-          </div>
-
-          <button
-            type="submit"
-            className={`w-full font-bold px-4 py-3 sm:py-4 rounded-lg transition-all duration-200 text-sm sm:text-base mt-2 shadow-lg hover:shadow-xl transform hover:scale-[1.02] ${
+        <div className="space-y-3">
+          {/* Gmail Link */}
+          <a
+            href="mailto:matasmatasp@gmail.com"
+            className={`flex items-center gap-3 p-3 rounded-lg transition-all duration-200 ${
               theme === "dark"
-                ? "bg-blue-700 text-white hover:bg-blue-800 focus:bg-blue-800"
-                : "bg-blue-600 text-white hover:bg-blue-700 focus:bg-blue-700"
-            } disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:hover:shadow-lg`}
-            disabled={loading || !!backendStatus}
+                ? "bg-gray-700 hover:bg-gray-600 border border-gray-600"
+                : "bg-white hover:bg-gray-50 border border-gray-200"
+            } shadow-sm hover:shadow-md group`}
           >
-            {loading ? (
-              <span className="flex items-center justify-center gap-2">
-                <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                    fill="none"
-                  />
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  />
-                </svg>
-                Sending...
-              </span>
-            ) : (
-              "Send Message"
-            )}
-          </button>
-
-          {sent && (
-            <div className="text-green-500 text-xs sm:text-sm mt-2 text-center p-2 bg-green-50 rounded-lg border border-green-200">
-              ✓ Message sent successfully!
+            <div className="flex items-center justify-center w-10 h-10 bg-red-500 text-white rounded-lg group-hover:scale-110 transition-transform">
+              <FaEnvelope size={18} />
             </div>
-          )}
-          {error && (
-            <div className="text-red-500 text-xs sm:text-sm mt-2 text-center p-2 bg-red-50 rounded-lg border border-red-200">
-              ⚠ {error}
+            <div className="flex-1">
+              <h4 className="font-medium text-sm sm:text-base">Email</h4>
+              <p
+                className={`text-xs sm:text-sm ${
+                  theme === "dark" ? "text-gray-400" : "text-gray-600"
+                }`}
+              >
+                matasmatasp@gmail.com
+              </p>
             </div>
-          )}
-        </form>
+            <FaExternalLinkAlt
+              className={`text-xs sm:text-sm ${
+                theme === "dark" ? "text-gray-400" : "text-gray-500"
+              } group-hover:text-blue-500 transition-colors`}
+            />
+          </a>
 
-        <div className="mt-6 text-center">
-          <span
-            className={`text-xs ${
-              theme === "dark" ? "text-gray-400" : "text-gray-500"
-            } block mb-2`}
+          {/* LinkedIn Link */}
+          <a
+            href="https://linkedin.com/in/matas-strimaitis"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`flex items-center gap-3 p-3 rounded-lg transition-all duration-200 ${
+              theme === "dark"
+                ? "bg-gray-700 hover:bg-gray-600 border border-gray-600"
+                : "bg-white hover:bg-gray-50 border border-gray-200"
+            } shadow-sm hover:shadow-md group`}
           >
-            Your message will be sent to
-          </span>
-          <span
-            className={`font-semibold text-sm ${
-              theme === "dark" ? "text-blue-400" : "text-blue-600"
+            <div className="flex items-center justify-center w-10 h-10 bg-blue-600 text-white rounded-lg group-hover:scale-110 transition-transform">
+              <FaLinkedin size={18} />
+            </div>
+            <div className="flex-1">
+              <h4 className="font-medium text-sm sm:text-base">LinkedIn</h4>
+              <p
+                className={`text-xs sm:text-sm ${
+                  theme === "dark" ? "text-gray-400" : "text-gray-600"
+                }`}
+              >
+                Professional Network
+              </p>
+            </div>
+            <FaExternalLinkAlt
+              className={`text-xs sm:text-sm ${
+                theme === "dark" ? "text-gray-400" : "text-gray-500"
+              } group-hover:text-blue-500 transition-colors`}
+            />
+          </a>
+        </div>
+
+        {status.type === "error" && (
+          <div
+            className={`mt-4 p-3 rounded-lg ${
+              theme === "dark" ? "bg-yellow-900/30" : "bg-yellow-100"
             }`}
           >
+            <p
+              className={`text-xs sm:text-sm ${
+                theme === "dark" ? "text-yellow-200" : "text-yellow-800"
+              }`}
+            >
+              💡 <strong>Tip:</strong> Click on the email link above to open
+              your default email client, or visit my LinkedIn profile to connect
+              professionally.
+            </p>
+          </div>
+        )}
+      </div>
+
+      {/* Footer Contact Info - Always visible */}
+      <div
+        className={`mt-6 pt-4 border-t text-center ${
+          theme === "dark" ? "border-gray-700" : "border-gray-200"
+        }`}
+      >
+        <p
+          className={`text-xs sm:text-sm ${
+            theme === "dark" ? "text-gray-400" : "text-gray-600"
+          }`}
+        >
+          Quick Contact:
+          <a
+            href="mailto:matasmatasp@gmail.com"
+            className="text-blue-500 hover:text-blue-600 mx-2 underline"
+          >
             matasmatasp@gmail.com
-          </span>
-        </div>
+          </a>
+          |
+          <a
+            href="https://linkedin.com/in/matas-strimaitis"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-500 hover:text-blue-600 mx-2 underline"
+          >
+            LinkedIn
+          </a>
+        </p>
       </div>
     </div>
   );
