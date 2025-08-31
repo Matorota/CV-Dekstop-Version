@@ -1,135 +1,110 @@
-import { VercelRequest, VercelResponse } from '@vercel/node';
+import { VercelRequest, VercelResponse } from "@vercel/node";
 import nodemailer from "nodemailer";
 
-// Enhanced logging function
-const log = (message: string, data?: any) => {
-  const timestamp = new Date().toISOString();
-  console.log(`[${timestamp}] ${message}`, data ? JSON.stringify(data, null, 2) : '');
-};
-
-// Create transporter with detailed logging
-const createTransporter = () => {
-  log('Creating email transporter with config:', {
-    service: 'gmail',
-    host: 'smtp.gmail.com',
-    port: 587,
-    secure: false,
-    hasUser: !!process.env.EMAIL_USER,
-    hasPass: !!process.env.EMAIL_PASS,
-    passLength: process.env.EMAIL_PASS ? process.env.EMAIL_PASS.length : 0
-  });
-
-  return nodemailer.createTransport({
-    service: "gmail",
-    host: "smtp.gmail.com",
-    port: 587,
-    secure: false,
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
-    tls: {
-      rejectUnauthorized: false,
-    },
-    debug: true, // Enable debug mode
-    logger: true, // Enable logging
-  });
-};
-
-const transporter = createTransporter();
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+  tls: {
+    rejectUnauthorized: false,
+  },
+});
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  // Set comprehensive CORS headers immediately
-  const allowedOrigins = [
-    'https://cv-dekstop-version.vercel.app',
-    'http://localhost:5173',
-    'http://localhost:3000',
-    'http://localhost:4173'
-  ];
+  // Set CORS headers immediately
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Content-Type, Accept, Authorization, X-Requested-With"
+  );
+  res.setHeader("Access-Control-Max-Age", "86400");
 
-  const origin = req.headers.origin as string;
-  
-  if (allowedOrigins.includes(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-  } else {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-  }
+  console.log(`${req.method} ${req.url}`);
+  console.log("Request body:", req.body);
 
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Accept, Authorization, X-Requested-With, Origin');
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-  res.setHeader('Access-Control-Max-Age', '86400');
-
-  // Log incoming request for debugging
-  console.log(`${req.method} ${req.url} from origin: ${origin}`);
-  console.log('Request headers:', req.headers);
-
-  // Handle preflight OPTIONS request immediately
-  if (req.method === 'OPTIONS') {
-    console.log('Handling OPTIONS preflight request');
-    res.status(200).end();
-    return;
+  // Handle preflight OPTIONS request
+  if (req.method === "OPTIONS") {
+    console.log("Handling OPTIONS preflight");
+    return res.status(200).end();
   }
 
   try {
-    const { method, url } = req;
-    log('Processing request:', { method, url });
+    const { method } = req;
 
-    // Health check endpoint
-    if (url === '/api/check' && method === 'GET') {
-      log('Health check requested');
-      
+    // Extract the path from the URL
+    const path = req.url?.split("?")[0] || "";
+    console.log("Processing path:", path);
+
+    // Health check endpoint - handle both /api/check and /check
+    if ((path === "/api/check" || path === "/check") && method === "GET") {
+      console.log("Health check endpoint hit");
+
       // Test email configuration
       try {
         await transporter.verify();
-        log('Email transporter verified successfully');
-        return res.status(200).json({ 
-          ok: true, 
+        console.log("Email transporter verified successfully");
+        return res.status(200).json({
+          ok: true,
           message: "Email service is ready",
           timestamp: new Date().toISOString(),
           config: {
             hasEmailUser: !!process.env.EMAIL_USER,
             hasEmailPass: !!process.env.EMAIL_PASS,
-            emailUser: process.env.EMAIL_USER ? process.env.EMAIL_USER.substring(0, 3) + '***' : 'not set'
-          }
+            emailUser: process.env.EMAIL_USER
+              ? process.env.EMAIL_USER.substring(0, 3) + "***"
+              : "not set",
+          },
         });
       } catch (verifyError) {
-        log('Email transporter verification failed:', verifyError);
-        return res.status(500).json({ 
-          ok: false, 
+        console.log("Email transporter verification failed:", verifyError);
+        return res.status(500).json({
+          ok: false,
           message: "Email service configuration error",
-          error: verifyError instanceof Error ? verifyError.message : String(verifyError)
+          error:
+            verifyError instanceof Error
+              ? verifyError.message
+              : String(verifyError),
         });
       }
     }
 
-    // Send email endpoint
-    if (url === '/api/send-email' && method === 'POST') {
-      log('Email send request received');
-      log('Request body:', req.body);
+    // Send email endpoint - handle both /api/send-email and /send-email
+    if (
+      (path === "/api/send-email" || path === "/send-email") &&
+      method === "POST"
+    ) {
+      console.log("Email send request received");
+      console.log("Request body:", req.body);
 
       const { name, email, message } = req.body;
 
       // Validate required fields
       if (!name?.trim() || !email?.trim() || !message?.trim()) {
-        log('Validation failed: Missing required fields', { name: !!name, email: !!email, message: !!message });
-        return res.status(400).json({ 
+        console.log("Validation failed: Missing required fields");
+        return res.status(400).json({
           success: false,
-          error: "Missing required fields: name, email, and message are required" 
+          error:
+            "Missing required fields: name, email, and message are required",
         });
       }
 
       // Validate email format
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email)) {
-        log('Validation failed: Invalid email format', email);
-        return res.status(400).json({ 
+        console.log("Validation failed: Invalid email format");
+        return res.status(400).json({
           success: false,
-          error: "Invalid email format" 
+          error: "Invalid email format",
         });
       }
 
-      log('Validation passed, preparing email');
+      console.log("Validation passed, preparing email");
 
       const mailOptions = {
         from: `"CV Contact Form" <${process.env.EMAIL_USER}>`,
@@ -154,65 +129,45 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         `,
       };
 
-      log('Mail options prepared:', {
-        from: mailOptions.from,
-        to: mailOptions.to,
-        subject: mailOptions.subject,
-        replyTo: mailOptions.replyTo
-      });
-
       try {
-        log('Attempting to send email...');
+        console.log("Attempting to send email...");
         const info = await transporter.sendMail(mailOptions);
-        log('Email sent successfully:', {
-          messageId: info.messageId,
-          accepted: info.accepted,
-          rejected: info.rejected,
-          response: info.response
-        });
+        console.log("Email sent successfully:", info.messageId);
 
-        return res.status(200).json({ 
-          success: true, 
+        return res.status(200).json({
+          success: true,
           messageId: info.messageId,
           message: "Email sent successfully!",
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
         });
       } catch (emailError) {
-        log('Email sending failed:', {
-          error: emailError instanceof Error ? emailError.message : String(emailError),
-          stack: emailError instanceof Error ? emailError.stack : undefined
-        });
-
+        console.log("Email sending failed:", emailError);
         return res.status(500).json({
           success: false,
           error: "Failed to send email",
-          details: emailError instanceof Error ? emailError.message : String(emailError),
-          timestamp: new Date().toISOString()
+          details:
+            emailError instanceof Error
+              ? emailError.message
+              : String(emailError),
+          timestamp: new Date().toISOString(),
         });
       }
     }
 
-    log('Endpoint not found:', { method, url });
-    return res.status(404).json({ 
+    console.log("Endpoint not found for path:", path);
+    return res.status(404).json({
       success: false,
       error: "Endpoint not found",
-      availableEndpoints: [
-        'GET /api/check',
-        'POST /api/send-email'
-      ]
+      path: path,
+      availableEndpoints: ["GET /api/check", "POST /api/send-email"],
     });
-
   } catch (error) {
-    log('Unhandled API error:', {
-      error: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined
-    });
-
+    console.log("Unhandled API error:", error);
     return res.status(500).json({
       success: false,
       error: "Internal server error",
       details: error instanceof Error ? error.message : String(error),
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 }

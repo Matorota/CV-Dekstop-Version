@@ -1,4 +1,5 @@
-const API_BASE = "https://backend-9bbxaljia-matorotas-projects.vercel.app";
+const API_BASE =
+  "https://backend-[DEPLOYMENT-ID]-matorotas-projects.vercel.app"; // update it when have time nibba
 
 export interface EmailData {
   name: string;
