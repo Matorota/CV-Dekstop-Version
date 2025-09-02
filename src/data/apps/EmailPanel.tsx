@@ -111,16 +111,16 @@ export default function EmailPanel() {
         className={`mb-4 p-3 rounded-lg flex items-center gap-2 ${
           serviceHealth === true
             ? theme === "dark"
-              ? "bg-green-900/20 border-green-600"
-              : "bg-green-50 border-green-300"
+              ? "bg-green-900/30 border border-green-600 text-green-200"
+              : "bg-green-50 border border-green-300 text-green-800"
             : serviceHealth === false
             ? theme === "dark"
-              ? "bg-red-900/20 border-red-600"
-              : "bg-red-50 border-red-300"
+              ? "bg-red-900/30 border border-red-600 text-red-200"
+              : "bg-red-50 border border-red-300 text-red-800"
             : theme === "dark"
-            ? "bg-gray-800/60 border-gray-600"
-            : "bg-gray-50 border-gray-300"
-        } border`}
+            ? "bg-gray-700/50 border border-gray-600 text-gray-200"
+            : "bg-gray-50 border border-gray-300 text-gray-600"
+        }`}
       >
         {serviceHealth === true && <FaCheckCircle className="text-green-500" />}
         {serviceHealth === false && (
@@ -141,7 +141,9 @@ export default function EmailPanel() {
         <div>
           <label
             htmlFor="name"
-            className="block text-sm font-medium mb-1 sm:mb-2"
+            className={`block text-sm font-medium mb-1 sm:mb-2 ${
+              theme === "dark" ? "text-gray-200" : "text-gray-700"
+            }`}
           >
             Name *
           </label>
@@ -154,7 +156,7 @@ export default function EmailPanel() {
             required
             className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base ${
               theme === "dark"
-                ? "bg-gray-800 border-gray-600 text-gray-200"
+                ? "bg-gray-700 border-gray-600 text-gray-100 placeholder-gray-400"
                 : "bg-white border-gray-300 text-gray-800"
             }`}
             placeholder="Your full name"
@@ -164,7 +166,9 @@ export default function EmailPanel() {
         <div>
           <label
             htmlFor="email"
-            className="block text-sm font-medium mb-1 sm:mb-2"
+            className={`block text-sm font-medium mb-1 sm:mb-2 ${
+              theme === "dark" ? "text-gray-200" : "text-gray-700"
+            }`}
           >
             Email *
           </label>
@@ -177,7 +181,7 @@ export default function EmailPanel() {
             required
             className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base ${
               theme === "dark"
-                ? "bg-gray-800 border-gray-600 text-gray-200"
+                ? "bg-gray-700 border-gray-600 text-gray-100 placeholder-gray-400"
                 : "bg-white border-gray-300 text-gray-800"
             }`}
             placeholder="your.email@example.com"
@@ -187,7 +191,9 @@ export default function EmailPanel() {
         <div>
           <label
             htmlFor="message"
-            className="block text-sm font-medium mb-1 sm:mb-2"
+            className={`block text-sm font-medium mb-1 sm:mb-2 ${
+              theme === "dark" ? "text-gray-200" : "text-gray-700"
+            }`}
           >
             Message *
           </label>
@@ -200,7 +206,7 @@ export default function EmailPanel() {
             rows={4}
             className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none text-sm sm:text-base ${
               theme === "dark"
-                ? "bg-gray-800 border-gray-600 text-gray-200"
+                ? "bg-gray-700 border-gray-600 text-gray-100 placeholder-gray-400"
                 : "bg-white border-gray-300 text-gray-800"
             }`}
             placeholder="Your message here..."
@@ -226,9 +232,15 @@ export default function EmailPanel() {
         <div
           className={`p-3 sm:p-4 rounded-lg mb-6 ${
             status.type === "success"
-              ? "bg-green-100 text-green-800 border border-green-200"
+              ? theme === "dark"
+                ? "bg-green-900/40 text-green-200 border border-green-700"
+                : "bg-green-100 text-green-800 border border-green-200"
               : status.type === "error"
-              ? "bg-red-100 text-red-800 border border-red-200"
+              ? theme === "dark"
+                ? "bg-red-900/40 text-red-200 border border-red-700"
+                : "bg-red-100 text-red-800 border border-red-200"
+              : theme === "dark"
+              ? "bg-blue-900/40 text-blue-200 border border-blue-700"
               : "bg-blue-100 text-blue-800 border border-blue-200"
           }`}
         >
@@ -255,18 +267,18 @@ export default function EmailPanel() {
         className={`p-4 sm:p-6 rounded-xl border ${
           status.type === "error"
             ? theme === "dark"
-              ? "bg-yellow-900/20 border-yellow-600"
-              : "bg-yellow-50 border-yellow-300"
+              ? "bg-yellow-900/30 border-yellow-600/50 text-yellow-100"
+              : "bg-yellow-50 border-yellow-300 text-yellow-800"
             : theme === "dark"
-            ? "bg-gray-800/60 border-gray-700"
-            : "bg-gray-50 border-gray-200"
+            ? "bg-gray-800/80 border-gray-600 text-gray-100"
+            : "bg-gray-50 border-gray-200 text-gray-700"
         }`}
       >
         {status.type === "error" && (
           <div className="mb-4">
             <h3
               className={`font-semibold text-base sm:text-lg mb-2 ${
-                theme === "dark" ? "text-yellow-300" : "text-yellow-800"
+                theme === "dark" ? "text-yellow-200" : "text-yellow-800"
               }`}
             >
               Having trouble? Contact me directly:
@@ -278,10 +290,10 @@ export default function EmailPanel() {
           className={`font-semibold text-sm sm:text-base mb-3 ${
             status.type === "error"
               ? theme === "dark"
-                ? "text-yellow-300"
+                ? "text-yellow-200"
                 : "text-yellow-800"
               : theme === "dark"
-              ? "text-gray-300"
+              ? "text-gray-200"
               : "text-gray-700"
           }`}
         >
@@ -294,7 +306,7 @@ export default function EmailPanel() {
             href="mailto:matasmatasp@gmail.com"
             className={`flex items-center gap-3 p-3 rounded-lg transition-all duration-200 ${
               theme === "dark"
-                ? "bg-gray-700 hover:bg-gray-600 border border-gray-600"
+                ? "bg-gray-700/80 hover:bg-gray-600/80 border border-gray-600 text-gray-100"
                 : "bg-white hover:bg-gray-50 border border-gray-200"
             } shadow-sm hover:shadow-md group`}
           >
@@ -305,7 +317,7 @@ export default function EmailPanel() {
               <h4 className="font-medium text-sm sm:text-base">Email</h4>
               <p
                 className={`text-xs sm:text-sm ${
-                  theme === "dark" ? "text-gray-400" : "text-gray-600"
+                  theme === "dark" ? "text-gray-300" : "text-gray-600"
                 }`}
               >
                 matasmatasp@gmail.com
@@ -313,7 +325,7 @@ export default function EmailPanel() {
             </div>
             <FaExternalLinkAlt
               className={`text-xs sm:text-sm ${
-                theme === "dark" ? "text-gray-400" : "text-gray-500"
+                theme === "dark" ? "text-gray-300" : "text-gray-500"
               } group-hover:text-blue-500 transition-colors`}
             />
           </a>
@@ -325,7 +337,7 @@ export default function EmailPanel() {
             rel="noopener noreferrer"
             className={`flex items-center gap-3 p-3 rounded-lg transition-all duration-200 ${
               theme === "dark"
-                ? "bg-gray-700 hover:bg-gray-600 border border-gray-600"
+                ? "bg-gray-700/80 hover:bg-gray-600/80 border border-gray-600 text-gray-100"
                 : "bg-white hover:bg-gray-50 border border-gray-200"
             } shadow-sm hover:shadow-md group`}
           >
@@ -336,7 +348,7 @@ export default function EmailPanel() {
               <h4 className="font-medium text-sm sm:text-base">LinkedIn</h4>
               <p
                 className={`text-xs sm:text-sm ${
-                  theme === "dark" ? "text-gray-400" : "text-gray-600"
+                  theme === "dark" ? "text-gray-300" : "text-gray-600"
                 }`}
               >
                 Professional Network
@@ -344,7 +356,7 @@ export default function EmailPanel() {
             </div>
             <FaExternalLinkAlt
               className={`text-xs sm:text-sm ${
-                theme === "dark" ? "text-gray-400" : "text-gray-500"
+                theme === "dark" ? "text-gray-300" : "text-gray-500"
               } group-hover:text-blue-500 transition-colors`}
             />
           </a>
@@ -353,12 +365,14 @@ export default function EmailPanel() {
         {status.type === "error" && (
           <div
             className={`mt-4 p-3 rounded-lg ${
-              theme === "dark" ? "bg-yellow-900/30" : "bg-yellow-100"
+              theme === "dark"
+                ? "bg-yellow-900/40 border border-yellow-700"
+                : "bg-yellow-100"
             }`}
           >
             <p
               className={`text-xs sm:text-sm ${
-                theme === "dark" ? "text-yellow-200" : "text-yellow-800"
+                theme === "dark" ? "text-yellow-100" : "text-yellow-800"
               }`}
             >
               💡 <strong>Tip:</strong> Click on the email link above to open
@@ -372,12 +386,12 @@ export default function EmailPanel() {
       {/* Footer Contact Info */}
       <div
         className={`mt-6 pt-4 border-t text-center ${
-          theme === "dark" ? "border-gray-700" : "border-gray-200"
+          theme === "dark" ? "border-gray-600" : "border-gray-200"
         }`}
       >
         <p
           className={`text-xs sm:text-sm ${
-            theme === "dark" ? "text-gray-400" : "text-gray-600"
+            theme === "dark" ? "text-gray-300" : "text-gray-600"
           }`}
         >
           Quick Contact:
