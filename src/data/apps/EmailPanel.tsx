@@ -23,7 +23,6 @@ export default function EmailPanel() {
   }>({ type: "idle", message: "" });
   const [serviceHealth, setServiceHealth] = useState<boolean | null>(null);
 
-  // Check service health on component mount
   useEffect(() => {
     const checkHealth = async () => {
       const isHealthy = await checkEmailService();
@@ -106,7 +105,6 @@ export default function EmailPanel() {
         Contact Me
       </h2>
 
-      {/* Service Health Indicator */}
       <div
         className={`mb-4 p-3 rounded-lg flex items-center gap-2 ${
           serviceHealth === true

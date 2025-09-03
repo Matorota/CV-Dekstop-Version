@@ -39,18 +39,17 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     { name: "Office_Network", strength: 85, secured: true },
     { name: "Guest_WiFi", strength: 70, secured: false },
     { name: "Public_Hotspot", strength: 45, secured: false },
+    { name: "LocalUserCafe", strength: 30, secured: false },
   ]);
 
   const connectToNetwork = async (networkName: string) => {
     setIsConnecting(true);
-    // Simulate connection delay
     await new Promise((resolve) => setTimeout(resolve, 1500));
     setWifiNetwork(networkName);
     setIsConnecting(false);
   };
 
   const scanNetworks = async () => {
-    // Simulate network scanning
     setAvailableNetworks((prev) => [...prev.sort(() => Math.random() - 0.5)]);
   };
 

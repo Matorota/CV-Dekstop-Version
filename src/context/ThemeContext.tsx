@@ -11,7 +11,6 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = useState<Theme>(() => {
-    // Get saved theme or use system preference
     const saved = localStorage.getItem("theme");
     if (saved === "dark" || saved === "light") return saved;
     return window.matchMedia("(prefers-color-scheme: dark)").matches
@@ -34,6 +33,6 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
 export const useTheme = () => {
   const context = useContext(ThemeContext);
-  if (!context) throw new Error("useTheme must be used within ThemeProvider");
+  if (!context) throw new Error("nThere is no such theme provided");
   return context;
 };
