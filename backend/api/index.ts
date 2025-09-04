@@ -28,7 +28,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   console.log(`${req.method} ${req.url}`);
   console.log("Request body:", req.body);
 
-  // Handle preflight OPTIONS request
   if (req.method === "OPTIONS") {
     console.log("Handling OPTIONS preflight");
     return res.status(200).end();
@@ -37,15 +36,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     const { method } = req;
 
-    // Extract the path from the URL
     const path = req.url?.split("?")[0] || "";
     console.log("Processing path:", path);
 
-    // Health check endpoint - handle both /api/check and /check
     if ((path === "/api/check" || path === "/check") && method === "GET") {
       console.log("Health check endpoint hit");
 
-      // Test email configuration
       try {
         await transporter.verify();
         console.log("Email transporter verified successfully");

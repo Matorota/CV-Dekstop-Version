@@ -161,7 +161,6 @@ export default function AboutMePanel() {
         </div>
       </div>
 
-      {/* Gallery Section - responsive */}
       <div className="mb-4 sm:mb-8">
         <h3 className="text-base sm:text-xl font-semibold mb-2 sm:mb-4">
           Gallery

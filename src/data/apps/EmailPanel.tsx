@@ -47,7 +47,6 @@ export default function EmailPanel() {
       return;
     }
 
-    // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
       setStatus({
@@ -225,7 +224,6 @@ export default function EmailPanel() {
         </button>
       </form>
 
-      {/* Status Messages */}
       {status.message && (
         <div
           className={`p-3 sm:p-4 rounded-lg mb-6 ${
@@ -260,7 +258,6 @@ export default function EmailPanel() {
         </div>
       )}
 
-      {/* Alternative Contact Methods */}
       <div
         className={`p-4 sm:p-6 rounded-xl border ${
           status.type === "error"
