@@ -1,12 +1,24 @@
 import { useState } from "react";
 import skillCategories from "./skillCategories";
+import { useTheme } from "../../context/ThemeContext";
 
 export default function SkillsPanel() {
+  const { theme } = useTheme();
   const [selected, setSelected] = useState<string | null>(null);
 
   return (
-    <div className="p-3 sm:p-6 w-full h-full overflow-y-auto">
-      <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-gray-800 border-b-2 border-blue-500 pb-2">
+    <div
+      className={`p-3 sm:p-6 w-full h-full overflow-y-auto ${
+        theme === "dark"
+          ? "bg-gray-900 text-gray-100"
+          : "bg-white text-gray-800"
+      }`}
+    >
+      <h2
+        className={`text-xl sm:text-2xl font-bold mb-4 sm:mb-6 border-b-2 border-blue-500 pb-2 ${
+          theme === "dark" ? "text-gray-100" : "text-gray-800"
+        }`}
+      >
         Professional Skills
       </h2>
 
@@ -19,6 +31,8 @@ export default function SkillsPanel() {
               ${
                 selected === cat.name
                   ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white border-transparent"
+                  : theme === "dark"
+                  ? "bg-gray-800 border-gray-600 text-gray-200 hover:border-blue-400 hover:bg-gray-700"
                   : "bg-white/90 border-blue-200 text-blue-900 hover:border-blue-400 hover:bg-blue-50"
               }`}
             onClick={() => setSelected(selected === cat.name ? null : cat.name)}
@@ -38,23 +52,47 @@ export default function SkillsPanel() {
               cat.skills.map((skill) => (
                 <div
                   key={skill.name}
-                  className="group relative bg-white/90 backdrop-blur-sm border border-blue-200 rounded-xl p-3 sm:p-4 shadow-lg 
-                             hover:shadow-xl transition-all duration-300 hover:border-blue-400 hover:scale-105"
+                  className={`group relative rounded-xl p-3 sm:p-4 shadow-lg 
+                             hover:shadow-xl transition-all duration-300 hover:scale-105 ${
+                               theme === "dark"
+                                 ? "bg-gray-800 border border-gray-600 hover:border-blue-400"
+                                 : "bg-white/90 backdrop-blur-sm border border-blue-200 hover:border-blue-400"
+                             }`}
                 >
                   <div className="flex flex-col items-center gap-2 sm:gap-3">
-                    <div className="text-xl sm:text-2xl p-2 rounded-full bg-blue-50 group-hover:bg-blue-100 transition-colors">
+                    <div
+                      className={`text-xl sm:text-2xl p-2 rounded-full transition-colors ${
+                        theme === "dark"
+                          ? "bg-gray-700 group-hover:bg-gray-600"
+                          : "bg-blue-50 group-hover:bg-blue-100"
+                      }`}
+                    >
                       {skill.icon}
                     </div>
-                    <span className="font-semibold text-gray-800 text-center text-sm sm:text-base">
+                    <span
+                      className={`font-semibold text-center text-sm sm:text-base ${
+                        theme === "dark" ? "text-gray-100" : "text-gray-800"
+                      }`}
+                    >
                       {skill.name}
                     </span>
                   </div>
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div
+                    className={`absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${
+                      theme === "dark"
+                        ? "bg-gradient-to-r from-blue-600/20 to-purple-600/20"
+                        : "bg-gradient-to-r from-blue-500/10 to-purple-500/10"
+                    }`}
+                  />
                 </div>
               ))
             )
         ) : (
-          <div className="col-span-full text-center text-gray-500 py-8 text-sm sm:text-base">
+          <div
+            className={`col-span-full text-center py-8 text-sm sm:text-base ${
+              theme === "dark" ? "text-gray-400" : "text-gray-500"
+            }`}
+          >
             Select a category to view skills
           </div>
         )}
@@ -62,11 +100,25 @@ export default function SkillsPanel() {
 
       {/* Category description */}
       {selected && (
-        <div className="mt-4 sm:mt-6 p-3 sm:p-4 bg-blue-50/80 rounded-xl border border-blue-200">
-          <h3 className="font-semibold text-blue-900 mb-2 text-sm sm:text-base">
+        <div
+          className={`mt-4 sm:mt-6 p-3 sm:p-4 rounded-xl border ${
+            theme === "dark"
+              ? "bg-gray-800 border-gray-600 text-gray-100"
+              : "bg-blue-50/80 border-blue-200 text-gray-600"
+          }`}
+        >
+          <h3
+            className={`font-semibold mb-2 text-sm sm:text-base ${
+              theme === "dark" ? "text-blue-400" : "text-blue-900"
+            }`}
+          >
             {selected} Skills
           </h3>
-          <p className="text-gray-600 text-xs sm:text-sm">
+          <p
+            className={`text-xs sm:text-sm ${
+              theme === "dark" ? "text-gray-300" : "text-gray-600"
+            }`}
+          >
             {selected === "Frontend" &&
               "Building responsive and interactive user interfaces."}
             {selected === "Backend" &&

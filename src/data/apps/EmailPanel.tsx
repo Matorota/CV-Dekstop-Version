@@ -97,10 +97,16 @@ export default function EmailPanel() {
   return (
     <div
       className={`p-3 sm:p-6 w-full h-full overflow-y-auto ${
-        theme === "dark" ? "text-gray-200" : "text-gray-800"
+        theme === "dark"
+          ? "bg-gray-900 text-gray-100"
+          : "bg-white text-gray-800"
       }`}
     >
-      <h2 className="text-lg sm:text-2xl font-bold mb-4 sm:mb-6 border-b-2 border-blue-500 pb-2">
+      <h2
+        className={`text-lg sm:text-2xl font-bold mb-4 sm:mb-6 border-b-2 border-blue-500 pb-2 ${
+          theme === "dark" ? "text-gray-100" : "text-gray-800"
+        }`}
+      >
         Contact Me
       </h2>
 
@@ -108,14 +114,14 @@ export default function EmailPanel() {
         className={`mb-4 p-3 rounded-lg flex items-center gap-2 ${
           serviceHealth === true
             ? theme === "dark"
-              ? "bg-green-900/30 border border-green-600 text-green-200"
+              ? "bg-green-900/40 border border-green-600 text-green-200"
               : "bg-green-50 border border-green-300 text-green-800"
             : serviceHealth === false
             ? theme === "dark"
-              ? "bg-red-900/30 border border-red-600 text-red-200"
+              ? "bg-red-900/40 border border-red-600 text-red-200"
               : "bg-red-50 border border-red-300 text-red-800"
             : theme === "dark"
-            ? "bg-gray-700/50 border border-gray-600 text-gray-200"
+            ? "bg-gray-800 border border-gray-600 text-gray-200"
             : "bg-gray-50 border border-gray-300 text-gray-600"
         }`}
       >
@@ -153,7 +159,7 @@ export default function EmailPanel() {
             required
             className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base ${
               theme === "dark"
-                ? "bg-gray-700 border-gray-600 text-gray-100 placeholder-gray-400"
+                ? "bg-gray-800 border-gray-600 text-gray-100 placeholder-gray-400 focus:bg-gray-700"
                 : "bg-white border-gray-300 text-gray-800"
             }`}
             placeholder="Your full name"
@@ -178,7 +184,7 @@ export default function EmailPanel() {
             required
             className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base ${
               theme === "dark"
-                ? "bg-gray-700 border-gray-600 text-gray-100 placeholder-gray-400"
+                ? "bg-gray-800 border-gray-600 text-gray-100 placeholder-gray-400 focus:bg-gray-700"
                 : "bg-white border-gray-300 text-gray-800"
             }`}
             placeholder="your.email@example.com"
@@ -203,7 +209,7 @@ export default function EmailPanel() {
             rows={4}
             className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none text-sm sm:text-base ${
               theme === "dark"
-                ? "bg-gray-700 border-gray-600 text-gray-100 placeholder-gray-400"
+                ? "bg-gray-800 border-gray-600 text-gray-100 placeholder-gray-400 focus:bg-gray-700"
                 : "bg-white border-gray-300 text-gray-800"
             }`}
             placeholder="Your message here..."
@@ -215,7 +221,9 @@ export default function EmailPanel() {
           disabled={status.type === "loading" || serviceHealth === false}
           className={`w-full font-medium py-2 px-4 rounded-lg transition-colors text-sm sm:text-base flex items-center justify-center gap-2 ${
             status.type === "loading" || serviceHealth === false
-              ? "bg-gray-400 cursor-not-allowed"
+              ? theme === "dark"
+                ? "bg-gray-700 text-gray-400 cursor-not-allowed"
+                : "bg-gray-400 cursor-not-allowed"
               : "bg-blue-600 hover:bg-blue-700 text-white"
           }`}
         >
@@ -262,10 +270,10 @@ export default function EmailPanel() {
         className={`p-4 sm:p-6 rounded-xl border ${
           status.type === "error"
             ? theme === "dark"
-              ? "bg-yellow-900/30 border-yellow-600/50 text-yellow-100"
+              ? "bg-yellow-900/40 border-yellow-600 text-yellow-100"
               : "bg-yellow-50 border-yellow-300 text-yellow-800"
             : theme === "dark"
-            ? "bg-gray-800/80 border-gray-600 text-gray-100"
+            ? "bg-gray-800 border-gray-600 text-gray-100"
             : "bg-gray-50 border-gray-200 text-gray-700"
         }`}
       >
@@ -301,7 +309,7 @@ export default function EmailPanel() {
             href="mailto:matasmatasp@gmail.com"
             className={`flex items-center gap-3 p-3 rounded-lg transition-all duration-200 ${
               theme === "dark"
-                ? "bg-gray-700/80 hover:bg-gray-600/80 border border-gray-600 text-gray-100"
+                ? "bg-gray-700 hover:bg-gray-600 border border-gray-600 text-gray-100"
                 : "bg-white hover:bg-gray-50 border border-gray-200"
             } shadow-sm hover:shadow-md group`}
           >
@@ -332,7 +340,7 @@ export default function EmailPanel() {
             rel="noopener noreferrer"
             className={`flex items-center gap-3 p-3 rounded-lg transition-all duration-200 ${
               theme === "dark"
-                ? "bg-gray-700/80 hover:bg-gray-600/80 border border-gray-600 text-gray-100"
+                ? "bg-gray-700 hover:bg-gray-600 border border-gray-600 text-gray-100"
                 : "bg-white hover:bg-gray-50 border border-gray-200"
             } shadow-sm hover:shadow-md group`}
           >

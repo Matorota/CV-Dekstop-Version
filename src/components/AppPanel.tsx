@@ -1,7 +1,7 @@
 import { Rnd } from "react-rnd";
 import type { ReactNode } from "react";
 import { useState } from "react";
-import { useTheme } from "next-themes";
+import { useTheme } from "../context/ThemeContext";
 
 type AppPanelProps = {
   name: string;
@@ -56,22 +56,30 @@ export default function AppPanel({
       <div
         className={`${
           theme === "dark"
-            ? "bg-gray-800/95 border-gray-600"
+            ? "bg-gray-900 border-gray-600"
             : "bg-white/95 border-blue-300"
         } rounded-xl shadow-2xl border-2 cursor-default h-full flex flex-col overflow-hidden`}
       >
         <div
           className={`window-titlebar flex items-center justify-between px-2 sm:px-4 py-2 ${
             theme === "dark"
-              ? "bg-gray-700 text-white border-gray-600"
+              ? "bg-gray-800 text-gray-100 border-gray-600"
               : "bg-blue-100 text-blue-900 border-blue-300"
           } rounded-t-xl border-b cursor-move select-none text-sm sm:text-lg flex-shrink-0`}
         >
-          <span className="font-bold text-blue-900 truncate">{name}</span>
+          <span
+            className={`font-bold truncate ${
+              theme === "dark" ? "text-gray-100" : "text-blue-900"
+            }`}
+          >
+            {name}
+          </span>
           <div className="flex items-center gap-2">
             <button
               onClick={onMinimize}
-              className="text-gray-500 hover:text-blue-600 text-lg px-1"
+              className={`hover:text-blue-600 text-lg px-1 ${
+                theme === "dark" ? "text-gray-400" : "text-gray-500"
+              }`}
               aria-label="Minimize"
               tabIndex={-1}
             >
@@ -88,7 +96,9 @@ export default function AppPanel({
             </button>
             <button
               onClick={() => setMaximized((m) => !m)}
-              className="text-gray-500 hover:text-blue-600 text-lg px-1"
+              className={`hover:text-blue-600 text-lg px-1 ${
+                theme === "dark" ? "text-gray-400" : "text-gray-500"
+              }`}
               aria-label={maximized ? "Restore" : "Maximize"}
               tabIndex={-1}
             >
@@ -122,7 +132,9 @@ export default function AppPanel({
             </button>
             <button
               onClick={onClose}
-              className="text-gray-500 hover:text-red-500 font-bold text-lg px-1"
+              className={`hover:text-red-500 font-bold text-lg px-1 ${
+                theme === "dark" ? "text-gray-400" : "text-gray-500"
+              }`}
               aria-label={`Close ${name}`}
               tabIndex={-1}
             >

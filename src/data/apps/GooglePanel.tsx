@@ -25,7 +25,6 @@ export default function GooglePanel() {
           : "bg-white text-gray-800"
       }`}
     >
-      {/* Navigation Bar - responsive */}
       <div
         className={`flex items-center gap-1 sm:gap-2 p-1 sm:p-2 border-b ${
           theme === "dark" ? "border-gray-700" : "border-gray-200"

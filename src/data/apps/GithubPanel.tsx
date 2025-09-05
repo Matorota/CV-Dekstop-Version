@@ -1,15 +1,32 @@
 import githubProjects from "./githubProjects";
+import { useTheme } from "../../context/ThemeContext";
 
 export default function GithubPanel() {
+  const { theme } = useTheme();
+
   return (
-    <div className="p-3 sm:p-6 w-full h-full overflow-y-auto">
+    <div
+      className={`p-3 sm:p-6 w-full h-full overflow-y-auto ${
+        theme === "dark"
+          ? "bg-gray-900 text-gray-100"
+          : "bg-white text-gray-800"
+      }`}
+    >
       <div className="flex flex-wrap items-center gap-2 mb-4">
-        <span className="text-black font-bold text-base sm:text-lg">
+        <span
+          className={`font-bold text-base sm:text-lg ${
+            theme === "dark" ? "text-gray-100" : "text-black"
+          }`}
+        >
           My Personal GitHub Projects
         </span>
       </div>
 
-      <h2 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4">
+      <h2
+        className={`text-lg sm:text-xl font-bold mb-3 sm:mb-4 ${
+          theme === "dark" ? "text-gray-100" : "text-gray-800"
+        }`}
+      >
         Main Projects
       </h2>
 
@@ -47,17 +64,31 @@ export default function GithubPanel() {
         ))}
       </div>
 
-      <span className="text-xs text-gray-500 block mb-3">
+      <span
+        className={`text-xs block mb-3 ${
+          theme === "dark" ? "text-gray-400" : "text-gray-500"
+        }`}
+      >
         Click "View on GitHub" to see the project source code.
       </span>
 
       <div className="flex flex-wrap items-center gap-2">
-        <span className="text-black text-sm sm:text-lg">Link to profile:</span>
+        <span
+          className={`text-sm sm:text-lg ${
+            theme === "dark" ? "text-gray-100" : "text-black"
+          }`}
+        >
+          Link to profile:
+        </span>
         <a
           href="https://github.com/Matorota"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-blue-700 underline hover:text-blue-900 transition text-sm sm:text-lg"
+          className={`underline hover:underline transition text-sm sm:text-lg ${
+            theme === "dark"
+              ? "text-blue-400 hover:text-blue-300"
+              : "text-blue-700 hover:text-blue-900"
+          }`}
         >
           Click here!
         </a>
