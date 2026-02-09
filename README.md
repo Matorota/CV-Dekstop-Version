@@ -1,6 +1,6 @@
+## ON HOLD
 # React + TypeScript + Vite + Tailwind
 
-## ON HOLD
 ### There are still few bugs left to fix but it's nearly finished. 
 
 See the progress live:
